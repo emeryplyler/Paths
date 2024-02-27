@@ -1,0 +1,98 @@
+[gd_scene load_steps=8 format=3 uid="uid://hf2pbkxluubv"]
+
+[ext_resource type="Script" path="res://assets/player/PlayerMovement.gd" id="1_uu05j"]
+[ext_resource type="Texture2D" uid="uid://d2ogxku0uwxan" path="res://assets/player/player.png" id="2_64tbq"]
+[ext_resource type="Script" path="res://assets/main_game_scene/Maze.gd" id="3_jxabw"]
+[ext_resource type="Texture2D" uid="uid://p41phmxl8pav" path="res://assets/environment/tilemap-export.png" id="4_0bqfs"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_flqml"]
+size = Vector2(177, 143)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4bi0o"]
+resource_name = "Walls"
+texture = ExtResource("4_0bqfs")
+texture_region_size = Vector2i(384, 384)
+0:0/next_alternative_id = 3
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/next_alternative_id = 2
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+3:0/0 = 0
+3:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:0/0/physics_layer_0/angular_velocity = 0.0
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+2:1/0 = 0
+2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:1/0/physics_layer_0/angular_velocity = 0.0
+3:1/0 = 0
+3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:1/0/physics_layer_0/angular_velocity = 0.0
+0:2/0 = 0
+0:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:2/0/physics_layer_0/angular_velocity = 0.0
+1:2/0 = 0
+1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:2/0/physics_layer_0/angular_velocity = 0.0
+2:2/0 = 0
+2:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:2/0/physics_layer_0/angular_velocity = 0.0
+3:2/0 = 0
+3:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:2/0/physics_layer_0/angular_velocity = 0.0
+0:3/0 = 0
+0:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:3/0/physics_layer_0/angular_velocity = 0.0
+1:3/0 = 0
+1:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:3/0/physics_layer_0/angular_velocity = 0.0
+2:3/0 = 0
+2:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:3/0/physics_layer_0/angular_velocity = 0.0
+3:3/0 = 0
+3:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:3/0/physics_layer_0/angular_velocity = 0.0
+
+[sub_resource type="TileSet" id="TileSet_3n0yj"]
+tile_size = Vector2i(384, 384)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_4bi0o")
+
+[node name="Root" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(278, 198)
+script = ExtResource("1_uu05j")
+SPEED = 500.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(4.5, 8.5)
+shape = SubResource("RectangleShape2D_flqml")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("2_64tbq")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_left = 0
+limit_top = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+
+[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map")]
+script = ExtResource("3_jxabw")
+Map = NodePath("TileMap")
+
+[node name="TileMap" type="TileMap" parent="Maze"]
+tile_set = SubResource("TileSet_3n0yj")
+format = 2
+layer_0/name = "Walls"
