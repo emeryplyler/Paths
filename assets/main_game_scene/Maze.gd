@@ -6,8 +6,8 @@ const S = 4 # 0100
 const W = 8 # 1000
 
 #var tile_size = 384
-var width = 3
-var height = 4
+var width = 5
+var height = 5
 
 @export var Map: TileMap
 var map_layer = 0
