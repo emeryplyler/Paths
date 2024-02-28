@@ -13,6 +13,9 @@ var height = 5
 var map_layer = 0
 var starting_spot = Vector2(0, 0)
 
+@export var Portal: PackedScene # object takes player to next maze
+var placed_portal: bool = false
+
 # Dictionary with vectors corresponding to the directions
 var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 				  Vector2(0, 1): S, Vector2(-1, 0): W}
@@ -21,9 +24,11 @@ var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
-	# Map.set_cell(map_layer, Vector2(0, 0), 0, id_to_coords(N|E|S|W))
-	# var test:int = coords_to_id(Map.get_cell_atlas_coords(map_layer, Vector2(0, 0)))
 	make_maze()
+
+func make_portal():
+	Portal.instantiate()
+	# TODO: the other instantiate things like add child
 
 # small functions because tilesets work differently in godot 4 than 3
 func id_to_coords(id:int):
@@ -70,8 +75,7 @@ func make_maze():
 			current = next
 			unvisited.erase(current) # we have visited a new tile
 		elif stack: # no neighbors to go to, but somethings in the stack
+			if not placed_portal:
+				make_portal()
 			current = stack.pop_back()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

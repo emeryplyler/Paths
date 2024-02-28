@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=9 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://d2ogxku0uwxan" path="res://assets/player/player.png" id="2_64tbq"]
 [ext_resource type="Script" path="res://main_game_scene/Maze.gd" id="3_jxabw"]
+[ext_resource type="PackedScene" uid="uid://d35hjqhp0ikpm" path="res://interactables/portal/portal.tscn" id="4_ftpbv"]
 [ext_resource type="Texture2D" uid="uid://v7qqcsbrmxkm" path="res://assets/environment/tilemap.png" id="4_ljr8a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flqml"]
@@ -128,6 +129,7 @@ position_smoothing_speed = 7.0
 [node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map")]
 script = ExtResource("3_jxabw")
 Map = NodePath("TileMap")
+Portal = ExtResource("4_ftpbv")
 
 [node name="TileMap" type="TileMap" parent="Maze"]
 tile_set = SubResource("TileSet_3n0yj")
