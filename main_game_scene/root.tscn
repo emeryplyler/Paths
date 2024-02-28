@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://hf2pbkxluubv"]
 
-[ext_resource type="Script" path="res://assets/player/PlayerMovement.gd" id="1_uu05j"]
+[ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://d2ogxku0uwxan" path="res://assets/player/player.png" id="2_64tbq"]
-[ext_resource type="Script" path="res://assets/main_game_scene/Maze.gd" id="3_jxabw"]
+[ext_resource type="Script" path="res://main_game_scene/Maze.gd" id="3_jxabw"]
 [ext_resource type="Texture2D" uid="uid://v7qqcsbrmxkm" path="res://assets/environment/tilemap.png" id="4_ljr8a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flqml"]
