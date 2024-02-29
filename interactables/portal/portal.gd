@@ -10,3 +10,4 @@ func _ready():
 func _process(delta):
 	pass
 	# handle collision with player
+	# reload the scene? or go to a new scene

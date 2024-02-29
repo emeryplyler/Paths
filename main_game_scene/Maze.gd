@@ -26,9 +26,10 @@ func _ready():
 	randomize()
 	make_maze()
 
-func make_portal():
-	Portal.instantiate()
-	# TODO: the other instantiate things like add child
+func make_portal(position:Vector2):
+	var new_portal:Node = Portal.instantiate()
+	new_portal.position = position
+	add_child(new_portal)
 
 # small functions because tilesets work differently in godot 4 than 3
 func id_to_coords(id:int):
@@ -60,6 +61,8 @@ func make_maze():
 	var current = starting_spot
 	unvisited.erase(current) # current tile is now visited
 	
+	var portal_tile # this will store tile coords of portal
+	
 	# recursive backtracker algorithm:
 	while unvisited: # while unvisited not empty
 		var neighbors = check_neighbors(current, unvisited)
@@ -72,10 +75,17 @@ func make_maze():
 			var next_walls = coords_to_id(Map.get_cell_atlas_coords(map_layer, next)) - cell_walls[-dir] # the subtraction turns it into a different shape tile
 			Map.set_cell(map_layer, current, 0, id_to_coords(current_walls)) # set tiles to new correct shape
 			Map.set_cell(map_layer, next, 0, id_to_coords(next_walls))
+			
 			current = next
 			unvisited.erase(current) # we have visited a new tile
+			
+			if not placed_portal:
+				portal_tile = current # save this location for placing portal
+			
 		elif stack: # no neighbors to go to, but somethings in the stack
 			if not placed_portal:
-				make_portal()
+				var position = to_global(Map.map_to_local(portal_tile)) # calculate where to spawn the portal in
+				make_portal(position)
+				placed_portal = true
 			current = stack.pop_back()
 
