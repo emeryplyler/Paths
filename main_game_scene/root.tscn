@@ -110,11 +110,9 @@ script = ExtResource("1_uu05j")
 SPEED = 500.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2(45.5, 48)
 shape = SubResource("RectangleShape2D_flqml")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
-position = Vector2(43, 43)
 scale = Vector2(0.57, 0.57)
 texture = ExtResource("2_64tbq")
 
