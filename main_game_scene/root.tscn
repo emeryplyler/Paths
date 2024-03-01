@@ -128,9 +128,10 @@ limit_bottom = 1920
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 
-[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map")]
+[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player")]
 script = ExtResource("3_jxabw")
 Map = NodePath("TileMap")
+Player = NodePath("../Player")
 Portal = ExtResource("4_ftpbv")
 
 [node name="TileMap" type="TileMap" parent="Maze"]

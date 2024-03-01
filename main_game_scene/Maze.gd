@@ -13,6 +13,8 @@ var height = 5
 var map_layer = 0
 var starting_spot = Vector2(0, 0)
 
+@export var Player: CharacterBody2D
+
 @export var Portal: PackedScene # object takes player to next maze
 var placed_portal: bool = false
 
@@ -24,6 +26,9 @@ var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	starting_spot = Vector2(randi_range(0, width - 1), randi_range(0, height - 1)) # randomize start spot
+	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
+	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
 	make_maze()
 
 func make_portal(position:Vector2):
