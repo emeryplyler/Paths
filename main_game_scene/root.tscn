@@ -99,13 +99,16 @@ texture_region_size = Vector2i(384, 384)
 
 [sub_resource type="TileSet" id="TileSet_3n0yj"]
 tile_size = Vector2i(384, 384)
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 4
+physics_layer_0/collision_mask = 2
 sources/0 = SubResource("TileSetAtlasSource_4bi0o")
 
 [node name="Root" type="Node2D"]
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(278, 198)
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_uu05j")
 SPEED = 500.0
 
