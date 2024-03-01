@@ -8,9 +8,10 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-	# handle collision with player
-	# reload the scene? or go to a new scene
 
 func _on_area_2d_body_entered(body):
 	# key detection?
-	pass
+	call_deferred("reset_scene") # godot gets upset if i don't defer the reset
+
+func reset_scene():
+	get_tree().reload_current_scene()

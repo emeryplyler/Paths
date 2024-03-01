@@ -84,8 +84,8 @@ func make_maze():
 			
 		elif stack: # no neighbors to go to, but somethings in the stack
 			if not placed_portal:
-				var position = to_global(Map.map_to_local(portal_tile)) # calculate where to spawn the portal in
-				make_portal(position)
+				var portal_position = to_global(Map.map_to_local(portal_tile)) # calculate where to spawn the portal in
+				make_portal(portal_position)
 				placed_portal = true
 			current = stack.pop_back()
 
