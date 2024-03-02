@@ -9,6 +9,8 @@ const W = 8 # 1000
 var width = 5
 var height = 5
 
+var passes: int = 0
+
 @export var Map: TileMap
 var map_layer = 0
 var starting_spot = Vector2(0, 0)
@@ -17,6 +19,9 @@ var starting_spot = Vector2(0, 0)
 
 @export var Portal: PackedScene # object takes player to next maze
 var placed_portal: bool = false
+var current_portal_inst
+
+const save_path: String = "user://savegame.save"
 
 # Dictionary with vectors corresponding to the directions
 var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
@@ -26,10 +31,18 @@ var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	
+	# read saved data
+	
 	starting_spot = Vector2(randi_range(0, width - 1), randi_range(0, height - 1)) # randomize start spot
 	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
 	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
 	make_maze()
+	
+	current_portal_inst = get_node("Portal")
+	current_portal_inst.player_entered_portal.connect(_on_player_entered_portal)
+	
+	save_data()
 
 func make_portal(position:Vector2):
 	var new_portal:Node = Portal.instantiate()
@@ -94,3 +107,18 @@ func make_maze():
 				placed_portal = true
 			current = stack.pop_back()
 
+func save_data():
+	var save_game = FileAccess.open(save_path, FileAccess.WRITE)
+	save_game.store_var(width)
+	save_game.close()
+
+func load_data():
+	if not FileAccess.file_exists(save_path):
+		save_data()
+		return
+	else:
+		var save_file = FileAccess.open(save_path, FileAccess.READ)
+
+func _on_player_entered_portal():
+	passes += 1
+	print("yea")
