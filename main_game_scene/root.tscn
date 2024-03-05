@@ -120,7 +120,7 @@ scale = Vector2(0.57, 0.57)
 texture = ExtResource("2_64tbq")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(0.345, 0.345)
+zoom = Vector2(2, 2)
 limit_left = 0
 limit_top = 0
 limit_right = 1920

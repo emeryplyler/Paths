@@ -122,6 +122,6 @@ func make_maze():
 func _on_player_entered_portal():
 	passes += 1
 	destroy_portal()
-	level_gen()
 	# TODO: do save data right here or something
+	level_gen()
 
