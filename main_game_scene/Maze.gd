@@ -1,11 +1,12 @@
-extends Node2D # code from KidsCanCode on YouTube - Procedural Content Generation Part 1
+extends Node2D # maze gen code from KidsCanCode on YouTube - Procedural Content Generation Part 1
 
 const N = 1 # 0001
 const E = 2 # 0010
 const S = 4 # 0100
 const W = 8 # 1000
 
-#var tile_size = 384
+const tile_size = 384
+const start_size = 5
 var width = 5
 var height = 5
 
@@ -16,12 +17,11 @@ var map_layer = 0
 var starting_spot = Vector2(0, 0)
 
 @export var Player: CharacterBody2D
+@export var Cam: Camera2D
 
 @export var Portal: PackedScene # object takes player to next maze
-var placed_portal: bool = false
-var current_portal_inst
 
-const save_path: String = "user://savegame.save"
+var current_portal_inst # will store reference to the portal spawned in
 
 # Dictionary with vectors corresponding to the directions
 var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
@@ -30,24 +30,35 @@ var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	level_gen()
+
+# create a level
+func level_gen():
 	randomize()
 	
-	# read saved data
+	width = start_size + (passes / 2)
+	height = start_size + (passes / 2)
+	Cam.limit_right = width * tile_size
+	Cam.limit_bottom = height * tile_size
 	
+	# read saved data
 	starting_spot = Vector2(randi_range(0, width - 1), randi_range(0, height - 1)) # randomize start spot
 	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
 	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
+	
 	make_maze()
 	
-	current_portal_inst = get_node("Portal")
 	current_portal_inst.player_entered_portal.connect(_on_player_entered_portal)
-	
-	save_data()
 
-func make_portal(position:Vector2):
+func make_portal(pos:Vector2):
 	var new_portal:Node = Portal.instantiate()
-	new_portal.position = position
+	new_portal.position = pos
 	add_child(new_portal)
+	current_portal_inst = new_portal
+
+func destroy_portal():
+	remove_child(current_portal_inst)
+	current_portal_inst.queue_free()
 
 # small functions because tilesets work differently in godot 4 than 3
 func id_to_coords(id:int):
@@ -70,8 +81,9 @@ func check_neighbors(cell, unvisited):
 func make_maze():
 	var unvisited = []
 	var stack = [] # homemade stack structure
+	var placed_portal: bool = false
 	# first we fill the map with solid tiles
-	Map.clear() # NOTE: clears tilemap; may interfere with future plans?
+	Map.clear()
 	for x in range(width):
 		for y in range(height):
 			unvisited.append(Vector2(x, y)) # add every tile to unvisited
@@ -107,18 +119,9 @@ func make_maze():
 				placed_portal = true
 			current = stack.pop_back()
 
-func save_data():
-	var save_game = FileAccess.open(save_path, FileAccess.WRITE)
-	save_game.store_var(width)
-	save_game.close()
-
-func load_data():
-	if not FileAccess.file_exists(save_path):
-		save_data()
-		return
-	else:
-		var save_file = FileAccess.open(save_path, FileAccess.READ)
-
 func _on_player_entered_portal():
 	passes += 1
-	print("yea")
+	destroy_portal()
+	level_gen()
+	# TODO: do save data right here or something
+
