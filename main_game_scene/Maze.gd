@@ -55,6 +55,8 @@ func make_portal(pos:Vector2):
 	new_portal.position = pos
 	add_child(new_portal)
 	current_portal_inst = new_portal
+	if current_portal_inst == null:
+		print("ERROR: current_portal_inst is null")
 
 func destroy_portal():
 	remove_child(current_portal_inst)

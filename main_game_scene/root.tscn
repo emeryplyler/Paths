@@ -111,6 +111,8 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_uu05j")
 SPEED = 500.0
+JUMP_VELOCITY = -600.0
+WALL_PUSH_VELOCITY = 500
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_flqml")
