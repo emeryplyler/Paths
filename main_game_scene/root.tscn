@@ -1,13 +1,14 @@
 [gd_scene load_steps=9 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
-[ext_resource type="Texture2D" uid="uid://d2ogxku0uwxan" path="res://assets/player/player.png" id="2_64tbq"]
+[ext_resource type="Texture2D" uid="uid://6logdjae4gc8" path="res://assets/player/player2.png" id="2_12wkn"]
 [ext_resource type="Script" path="res://main_game_scene/Maze.gd" id="3_jxabw"]
 [ext_resource type="PackedScene" uid="uid://d35hjqhp0ikpm" path="res://interactables/portal/portal.tscn" id="4_ftpbv"]
 [ext_resource type="Texture2D" uid="uid://v7qqcsbrmxkm" path="res://assets/environment/tilemap.png" id="4_ljr8a"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_flqml"]
-size = Vector2(95, 64)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o2pi5"]
+radius = 17.55
+height = 110.85
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4bi0o"]
 resource_name = "Walls"
@@ -105,7 +106,7 @@ sources/0 = SubResource("TileSetAtlasSource_4bi0o")
 
 [node name="Root" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("sprite", "timer")]
 position = Vector2(278, 198)
 collision_layer = 2
 collision_mask = 5
@@ -113,13 +114,16 @@ script = ExtResource("1_uu05j")
 SPEED = 500.0
 JUMP_VELOCITY = -600.0
 WALL_PUSH_VELOCITY = 500
+sprite = NodePath("Sprite2D")
+timer = NodePath("WallJumpTimer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_flqml")
+shape = SubResource("CapsuleShape2D_o2pi5")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
+position = Vector2(-3, 0)
 scale = Vector2(0.57, 0.57)
-texture = ExtResource("2_64tbq")
+texture = ExtResource("2_12wkn")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(2, 2)
@@ -129,6 +133,9 @@ limit_right = 1920
 limit_bottom = 1920
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
+
+[node name="WallJumpTimer" type="Timer" parent="Player"]
+wait_time = 0.13
 
 [node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam")]
 script = ExtResource("3_jxabw")
@@ -141,3 +148,5 @@ Portal = ExtResource("4_ftpbv")
 tile_set = SubResource("TileSet_3n0yj")
 format = 2
 layer_0/name = "Walls"
+
+[connection signal="timeout" from="Player/WallJumpTimer" to="Player" method="_on_wall_jump_timer_timeout"]
