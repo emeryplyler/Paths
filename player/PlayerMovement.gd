@@ -26,9 +26,7 @@ func _physics_process(delta):
 			has_double_jumped = false
 			velocity.y = JUMP_VELOCITY
 		
-		elif not has_double_jumped and not is_on_floor():
-			velocity.y = JUMP_VELOCITY
-			has_double_jumped = true
+		
 			
 		elif is_on_wall() and not is_on_floor():
 			velocity.y = JUMP_VELOCITY
@@ -37,9 +35,14 @@ func _physics_process(delta):
 			else:
 				velocity.x = -WALL_PUSH_VELOCITY
 			flip()
+			print("facing left: ", facing_left, " velocity x: ", velocity.x)
 			is_wall_pushing = true
 			has_double_jumped = false
 			timer.start()
+			
+		elif not has_double_jumped and not is_on_floor():
+			velocity.y = JUMP_VELOCITY
+			has_double_jumped = true
 		
 		
 	if not is_wall_pushing: # player has not just wall jumped
