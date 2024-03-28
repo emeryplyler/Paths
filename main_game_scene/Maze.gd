@@ -57,14 +57,16 @@ func level_gen():
 func make_portal(pos:Vector2):
 	var new_portal:Node = Portal.instantiate()
 	new_portal.position = pos
-	add_child(new_portal)
+	call_deferred("add_child", new_portal) # godot gets mad if this isn't deferred
+	#add_child(new_portal)
 	current_portal_inst = new_portal
 	if current_portal_inst == null:
 		print("ERROR: current_portal_inst is null")
 		print("Position: ", pos)
 
 func destroy_portal():
-	remove_child(current_portal_inst)
+	call_deferred("remove_child", current_portal_inst) # godot gets mad if this isn't deferred also
+	#remove_child(current_portal_inst)
 	current_portal_inst.queue_free()
 
 # small functions because tilesets work differently in godot 4 than 3
@@ -116,16 +118,11 @@ func make_maze():
 			
 			if randi_range(0, 1) == 1: # may or may not set hazard tile
 				var tile_atlas_coords = id_to_coords(current_walls)
-				if tile_atlas_coords in hazard_tiles_1:
+				if tile_atlas_coords in hazard_tiles_1: # tile type required is a possible hazard tile
 					if tile_atlas_coords in hazard_tiles_2:
 						atlas_source = randi_range(1, 2) # 2 possible tiles, pick one
 					else:
 						atlas_source = 1
-					print("Hazard created at ", current)
-			# if next (the next tile we are placing) is within a certain set of coordinates then use atlas source 1 instead of 0
-			# the set of coordinates will contain all locations of potetional hazards
-			# if next matches two tiles, perform the following
-			# coin flip again - if true, use source 1, else use source 2
 			
 			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) # set tiles to new correct shape
 			Map.set_cell(map_layer, next, atlas_source, id_to_coords(next_walls))
