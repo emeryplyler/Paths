@@ -5,6 +5,10 @@ const E = 2 # 0010
 const S = 4 # 0100
 const W = 8 # 1000
 
+# coordinates of hazard tiles, atlas 1 and 2 respectively
+const hazard_tiles_1 = [Vector2(1, 0), Vector2(2, 0), Vector2(1, 1), Vector2(0, 1), Vector2(0, 2), Vector2(2, 2)]
+const hazard_tiles_2 = [Vector2(1, 1), Vector2(2, 2)]
+
 const tile_size = 384
 const start_size = 5
 var width = 5
@@ -106,8 +110,25 @@ func make_maze():
 			var dir = next - current # subtract coordinates; this gives us a vector
 			var current_walls = coords_to_id(Map.get_cell_atlas_coords(map_layer, current)) - cell_walls[dir] # subtract 1 2 4 or 8 from id (up to 15) of tile
 			var next_walls = coords_to_id(Map.get_cell_atlas_coords(map_layer, next)) - cell_walls[-dir] # the subtraction turns it into a different shape tile
-			Map.set_cell(map_layer, current, 0, id_to_coords(current_walls)) # set tiles to new correct shape
-			Map.set_cell(map_layer, next, 0, id_to_coords(next_walls))
+			
+			# insert hazards here:
+			var atlas_source: int = 0 # use normal atlas by default
+			
+			if randi_range(0, 1) == 1: # may or may not set hazard tile
+				var tile_atlas_coords = id_to_coords(current_walls)
+				if tile_atlas_coords in hazard_tiles_1:
+					if tile_atlas_coords in hazard_tiles_2:
+						atlas_source = randi_range(1, 2) # 2 possible tiles, pick one
+					else:
+						atlas_source = 1
+					print("Hazard created at ", current)
+			# if next (the next tile we are placing) is within a certain set of coordinates then use atlas source 1 instead of 0
+			# the set of coordinates will contain all locations of potetional hazards
+			# if next matches two tiles, perform the following
+			# coin flip again - if true, use source 1, else use source 2
+			
+			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) # set tiles to new correct shape
+			Map.set_cell(map_layer, next, atlas_source, id_to_coords(next_walls))
 			
 			current = next
 			unvisited.erase(current) # we have visited a new tile

@@ -35,7 +35,7 @@ func _physics_process(delta):
 			else:
 				velocity.x = -WALL_PUSH_VELOCITY
 			flip()
-			print("facing left: ", facing_left, " velocity x: ", velocity.x)
+
 			is_wall_pushing = true
 			has_double_jumped = false
 			timer.start()
