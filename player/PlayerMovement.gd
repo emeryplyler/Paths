@@ -63,6 +63,14 @@ func _physics_process(delta):
 			#velocity.y = move_toward(velocity.y, 0, SPEED)
 
 	move_and_slide()
+	#for i in get_slide_collision_count():
+		#var collision = get_slide_collision(i)
+		#var collider:TileMap = collision.get_collider()
+		#if collider.tile_set.get_physics_layer_collision_layer(0) == 8:
+			#print("Ow")
+		#else:
+			#print(collider.tile_set.get_physics_layer_collision_layer(0))
+	# TODO: detect collision with collision layer 4 (hazards)
 
 func flip():
 	facing_left = not facing_left
@@ -72,3 +80,12 @@ func flip():
 
 func _on_wall_jump_timer_timeout():
 	is_wall_pushing = false
+
+# on_player_touch_hazard():
+#Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
+#Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
+
+
+func _on_hazard_detector_body_entered(body):
+	print("ow")
+

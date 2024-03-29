@@ -43,6 +43,13 @@ position_smoothing_speed = 7.0
 [node name="WallJumpTimer" type="Timer" parent="Player"]
 wait_time = 0.13
 
+[node name="HazardDetector" type="Area2D" parent="Player"]
+collision_layer = 2
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/HazardDetector"]
+shape = SubResource("CapsuleShape2D_o2pi5")
+
 [node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam")]
 script = ExtResource("3_jxabw")
 Map = NodePath("TileMap")
@@ -56,3 +63,5 @@ format = 2
 layer_0/name = "Walls"
 
 [connection signal="timeout" from="Player/WallJumpTimer" to="Player" method="_on_wall_jump_timer_timeout"]
+[connection signal="body_entered" from="Player/HazardDetector" to="Player" method="_on_hazard_detector_body_entered"]
+[connection signal="body_entered" from="Player/HazardDetector" to="Maze" method="_on_hazard_detector_body_entered"]

@@ -46,6 +46,7 @@ func level_gen():
 	Cam.limit_bottom = height * tile_size
 	
 	# read saved data
+	
 	starting_spot = Vector2(randi_range(0, width - 1), randi_range(0, height - 1)) # randomize start spot
 	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
 	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
@@ -146,3 +147,8 @@ func _on_player_entered_portal():
 	# TODO: do save data right here or something
 	level_gen()
 
+
+
+func _on_hazard_detector_body_entered(body):
+	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
+	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
