@@ -31,6 +31,7 @@ var current_portal_inst # will store reference to the portal spawned in
 var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 				  Vector2(0, 1): S, Vector2(-1, 0): W}
 
+signal player_died
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -148,7 +149,11 @@ func _on_player_entered_portal():
 	level_gen()
 
 
-
 func _on_hazard_detector_body_entered(body):
+	# respawn player at start
+	player_died.emit()
+
+func _on_animation_player_animation_changed(old_name, new_name):
 	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
 	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
+	Player.velocity = Vector2.ZERO # no momentum
