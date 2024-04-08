@@ -60,7 +60,6 @@ func make_portal(pos:Vector2):
 	var new_portal:Node = Portal.instantiate()
 	new_portal.position = pos
 	call_deferred("add_child", new_portal) # godot gets mad if this isn't deferred
-	#add_child(new_portal)
 	current_portal_inst = new_portal
 	if current_portal_inst == null:
 		print("ERROR: current_portal_inst is null")

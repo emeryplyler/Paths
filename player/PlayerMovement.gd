@@ -6,6 +6,7 @@ extends CharacterBody2D
 @export var WALL_PUSH_VELOCITY = 0
 @export var sprite: Sprite2D
 @export var timer: Timer
+@export var max_fall_speed: float
 
 var facing_left: bool = false
 var is_wall_pushing: bool = false
@@ -14,11 +15,30 @@ var has_double_jumped: bool = false
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+var glide_t: float = 0 # used for lerping glide
 
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
-		velocity.y += gravity * delta
+		glide_t += 0.01
+		glide_t = clampf(glide_t, 0, 1)
+		if Input.is_action_just_pressed("Glide"):
+			glide_t = 0
+		if Input.is_action_pressed("Glide"):
+			# t += delta * 0.4
+			#$Sprite2D.position = $A.position.lerp($B.position, t)
+			#velocity.y = (gravity * delta).lerp(0.5 * gravity * delta, glide_t)
+			#if velocity.y <= max_fall_speed:
+				#velocity.y += lerpf((gravity * delta), (0.2 * gravity * delta), glide_t)
+			#elif velocity.y >= max_fall_speed:
+				#velocity.y -= lerpf((gravity * delta), (0.2 * gravity * delta), glide_t)
+			
+			velocity.y = lerpf(velocity.y, max_fall_speed, glide_t)
+			
+			# TODO: so this isn't working because it doesn't reduce fall after hitting terminal velocity
+			# it also is affecting things while the player is still rising; limit its effects to during falling
+		else:
+			velocity.y += gravity * delta
 
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump"):
