@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=20 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://5kr8hda8ohc0" path="res://donotcommit/playeratlas.png" id="2_6rjre"]
@@ -65,6 +65,21 @@ _data = {
 "unfading": SubResource("Animation_ereci")
 }
 
+[sub_resource type="Animation" id="Animation_3ucbu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="Animation" id="Animation_oqsja"]
 resource_name = "idle"
 loop_mode = 1
@@ -98,27 +113,36 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
-[sub_resource type="Animation" id="Animation_3ucbu"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2pm6e"]
 _data = {
 "RESET": SubResource("Animation_3ucbu"),
 "idle": SubResource("Animation_oqsja"),
 "run": SubResource("Animation_0iq6k")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8s67w"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qhr13"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_n7wox"]
+input_0/name = "idle"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "run"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5va6m"]
+graph_offset = Vector2(-551.728, 43.8181)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_qhr13")
+nodes/Animation/position = Vector2(-129, 83)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_8s67w")
+"nodes/Animation 2/position" = Vector2(-140, 240)
+nodes/movement/node = SubResource("AnimationNodeTransition_n7wox")
+nodes/movement/position = Vector2(120, 160)
+node_connections = [&"movement", 0, &"Animation", &"movement", 1, &"Animation 2", &"output", 0, &"movement"]
 
 [node name="Root" type="Node2D"]
 
@@ -133,7 +157,7 @@ WALL_PUSH_VELOCITY = 500
 sprite = NodePath("Sprite2D")
 timer = NodePath("WallJumpTimer")
 max_fall_speed = 100.0
-anim_tree = NodePath("")
+anim_tree = NodePath("AnimationTree")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_o2pi5")
@@ -184,6 +208,16 @@ shape = SubResource("CapsuleShape2D_o2pi5")
 libraries = {
 "": SubResource("AnimationLibrary_2pm6e")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_2pm6e")
+}
+tree_root = SubResource("AnimationNodeBlendTree_5va6m")
+anim_player = NodePath("../AnimationPlayer")
+parameters/movement/current_state = "idle"
+parameters/movement/transition_request = ""
+parameters/movement/current_index = 0
 
 [node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam")]
 script = ExtResource("3_jxabw")

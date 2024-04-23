@@ -12,7 +12,7 @@ extends CharacterBody2D
 enum anim_states {
 	idle, running, jumping, falling, gliding, wallclinging, walljumping
 }
-var current_anim_state = anim_states.idle
+var current_anim_state
 
 var facing_left: bool = false
 var is_wall_pushing: bool = false
@@ -22,6 +22,10 @@ var has_double_jumped: bool = false
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var glide_t: float = 0 # used for lerping glide
+
+func _ready():
+	anim_tree.active = true 
+	current_anim_state = anim_states.idle
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -70,18 +74,23 @@ func _physics_process(delta):
 				flip()
 			elif lr > 0 and facing_left:
 				flip()
+			if is_on_floor():
+				current_anim_state = anim_states.running # player is moving and on the floor
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
-
+			if is_on_floor():
+				current_anim_state = anim_states.idle # player not moving and on floor
 
 	move_and_slide()
+	update_anim_params()
 
 func update_anim_params():
-	if velocity == Vector2.ZERO:
-		anim_tree["parameters/conditions/is_idle"] = true
+	if current_anim_state == anim_states.idle:
+		anim_tree.set("parameters/movement/transition_request", "idle")
+		
 	else:
 		if current_anim_state == anim_states.running:
-			print("Running")
+			anim_tree.set("parameters/movement/transition_request", "run")
 
 func flip():
 	facing_left = not facing_left
@@ -91,4 +100,3 @@ func flip():
 
 func _on_wall_jump_timer_timeout():
 	is_wall_pushing = false
-
