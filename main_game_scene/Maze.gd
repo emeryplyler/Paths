@@ -88,16 +88,19 @@ func check_neighbors(cell, unvisited):
 			list.append(cell + n)
 	return list
 
+
 func make_maze():
 	var unvisited = []
 	var stack = [] # homemade stack structure
 	var placed_portal: bool = false
+	
 	# first we fill the map with solid tiles
 	Map.clear()
 	for x in range(width):
 		for y in range(height):
 			unvisited.append(Vector2(x, y)) # add every tile to unvisited
 			Map.set_cell(map_layer, Vector2(x, y), 0, id_to_coords(N|E|S|W)) # set tile to 15 (the solid one)
+	
 	var current = starting_spot
 	unvisited.erase(current) # current tile is now visited
 	
@@ -141,6 +144,7 @@ func make_maze():
 				placed_portal = true
 			current = stack.pop_back()
 
+
 func _on_player_entered_portal():
 	passes += 1
 	destroy_portal()
@@ -151,6 +155,7 @@ func _on_player_entered_portal():
 func _on_hazard_detector_body_entered(body):
 	# respawn player at start
 	player_died.emit()
+
 
 func _on_animation_player_animation_changed(old_name, new_name):
 	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place

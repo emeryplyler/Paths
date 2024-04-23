@@ -8,6 +8,12 @@ extends CharacterBody2D
 @export var timer: Timer
 @export var max_fall_speed: float
 
+@export var anim_tree: AnimationTree
+enum anim_states {
+	idle, running, jumping, falling, gliding, wallclinging, walljumping
+}
+var current_anim_state = anim_states.idle
+
 var facing_left: bool = false
 var is_wall_pushing: bool = false
 var has_double_jumped: bool = false
@@ -24,19 +30,10 @@ func _physics_process(delta):
 		glide_t = clampf(glide_t, 0, 1)
 		if Input.is_action_just_pressed("Glide"):
 			glide_t = 0
-		if Input.is_action_pressed("Glide"):
-			# t += delta * 0.4
-			#$Sprite2D.position = $A.position.lerp($B.position, t)
-			#velocity.y = (gravity * delta).lerp(0.5 * gravity * delta, glide_t)
-			#if velocity.y <= max_fall_speed:
-				#velocity.y += lerpf((gravity * delta), (0.2 * gravity * delta), glide_t)
-			#elif velocity.y >= max_fall_speed:
-				#velocity.y -= lerpf((gravity * delta), (0.2 * gravity * delta), glide_t)
 			
+		if Input.is_action_pressed("Glide"):
 			velocity.y = lerpf(velocity.y, max_fall_speed, glide_t)
 			
-			# TODO: so this isn't working because it doesn't reduce fall after hitting terminal velocity
-			# it also is affecting things while the player is still rising; limit its effects to during falling
 		else:
 			velocity.y += gravity * delta
 
@@ -45,8 +42,6 @@ func _physics_process(delta):
 		if is_on_floor():
 			has_double_jumped = false
 			velocity.y = JUMP_VELOCITY
-		
-		
 			
 		elif is_on_wall() and not is_on_floor():
 			velocity.y = JUMP_VELOCITY
@@ -77,13 +72,16 @@ func _physics_process(delta):
 				flip()
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
-		#if ud:
-			#velocity.y = ud * SPEED
-		#else:
-			#velocity.y = move_toward(velocity.y, 0, SPEED)
+
 
 	move_and_slide()
 
+func update_anim_params():
+	if velocity == Vector2.ZERO:
+		anim_tree["parameters/conditions/is_idle"] = true
+	else:
+		if current_anim_state == anim_states.running:
+			print("Running")
 
 func flip():
 	facing_left = not facing_left
