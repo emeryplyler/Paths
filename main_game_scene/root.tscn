@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=27 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://5kr8hda8ohc0" path="res://donotcommit/playeratlas.png" id="2_6rjre"]
@@ -188,6 +188,33 @@ _data = {
 "run": SubResource("Animation_0iq6k")
 }
 
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_ucrmj"]
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_g1hom"]
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_m4gj7"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7ut0e"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mhrwv"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2omkb"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ulora"]
+states/End/position = Vector2(731, 100)
+states/Idle/node = SubResource("AnimationNodeBlendSpace2D_ucrmj")
+states/Idle/position = Vector2(314, 100)
+states/Jump/node = SubResource("AnimationNodeBlendSpace2D_g1hom")
+states/Jump/position = Vector2(423, 166)
+states/Run/node = SubResource("AnimationNodeBlendSpace2D_m4gj7")
+states/Run/position = Vector2(423, 39)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_7ut0e"), "Run", "Jump", SubResource("AnimationNodeStateMachineTransition_mhrwv"), "Jump", "Run", SubResource("AnimationNodeStateMachineTransition_2omkb")]
+graph_offset = Vector2(46, -24)
+
 [node name="Root" type="Node2D"]
 
 [node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("sprite", "timer", "anim_tree", "anim_player")]
@@ -253,6 +280,16 @@ shape = SubResource("CapsuleShape2D_o2pi5")
 libraries = {
 "": SubResource("AnimationLibrary_2pm6e")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_2pm6e")
+}
+tree_root = SubResource("AnimationNodeStateMachine_ulora")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Idle/blend_position = Vector2(0, 0)
+parameters/Jump/blend_position = Vector2(0, 0)
+parameters/Run/blend_position = Vector2(0, 0)
 
 [node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam")]
 script = ExtResource("3_jxabw")
