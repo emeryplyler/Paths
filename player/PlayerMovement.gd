@@ -9,8 +9,9 @@ extends CharacterBody2D
 @export var max_fall_speed: float
 
 @export var anim_tree: AnimationTree
+@export var anim_player: AnimationPlayer
 enum anim_states {
-	idle, running, jumping, falling, gliding, wallclinging, walljumping
+	idle, running, jumping, falling, gliding, wallclinging, walljumping, landing
 }
 var current_anim_state
 
@@ -34,18 +35,22 @@ func _physics_process(delta):
 		glide_t = clampf(glide_t, 0, 1)
 		if Input.is_action_just_pressed("Glide"):
 			glide_t = 0
+			current_anim_state = anim_states.gliding
 			
 		if Input.is_action_pressed("Glide"):
 			velocity.y = lerpf(velocity.y, max_fall_speed, glide_t)
+			current_anim_state = anim_states.gliding
 			
 		else:
 			velocity.y += gravity * delta
+			current_anim_state = anim_states.falling
 
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump"):
 		if is_on_floor():
 			has_double_jumped = false
 			velocity.y = JUMP_VELOCITY
+			current_anim_state = anim_states.jumping
 			
 		elif is_on_wall() and not is_on_floor():
 			velocity.y = JUMP_VELOCITY
@@ -58,10 +63,12 @@ func _physics_process(delta):
 			is_wall_pushing = true
 			has_double_jumped = false
 			timer.start()
+			current_anim_state = anim_states.walljumping
 			
 		elif not has_double_jumped and not is_on_floor():
 			velocity.y = JUMP_VELOCITY
 			has_double_jumped = true
+			current_anim_state = anim_states.jumping
 		
 		
 	if not is_wall_pushing: # player has not just wall jumped
@@ -85,12 +92,32 @@ func _physics_process(delta):
 	update_anim_params()
 
 func update_anim_params():
-	if current_anim_state == anim_states.idle:
-		anim_tree.set("parameters/movement/transition_request", "idle")
-		
-	else:
-		if current_anim_state == anim_states.running:
-			anim_tree.set("parameters/movement/transition_request", "run")
+	#if current_anim_state == anim_states.idle:
+		#anim_tree.set("parameters/movement/transition_request", "idle")
+		#
+	#else:
+		#if current_anim_state == anim_states.running:
+			#anim_tree.set("parameters/movement/transition_request", "run")
+		#if !is_on_floor():
+			#if current_anim_state == anim_states.gliding:
+				#anim_tree.set("parameters/movement/transition_request", "glide")
+			#elif current_anim_state == anim_states.falling:
+				#anim_tree.set("parameters/movement/transition_request", "fall")
+
+	match current_anim_state:
+		anim_states.idle:
+			anim_player.play("idle")
+		anim_states.running:
+			anim_player.play("run")
+		anim_states.gliding:
+			anim_player.play("glide")
+		anim_states.falling:
+			anim_player.play("fall")
+		anim_states.jumping:
+			anim_player.play("jump")
+		_:
+			anim_player.play("idle")
+	
 
 func flip():
 	facing_left = not facing_left

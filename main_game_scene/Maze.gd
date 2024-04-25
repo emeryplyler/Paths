@@ -53,8 +53,10 @@ func level_gen():
 	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
 	
 	make_maze()
-	
-	current_portal_inst.player_entered_portal.connect(_on_player_entered_portal)
+	if current_portal_inst == null:
+		print("Didn't create portal")
+	else:
+		current_portal_inst.player_entered_portal.connect(_on_player_entered_portal)
 
 func make_portal(pos:Vector2):
 	var new_portal:Node = Portal.instantiate()

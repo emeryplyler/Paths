@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=31 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://5kr8hda8ohc0" path="res://donotcommit/playeratlas.png" id="2_6rjre"]
@@ -80,6 +80,38 @@ tracks/0/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_klad8"]
+resource_name = "fall"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [15]
+}
+
+[sub_resource type="Animation" id="Animation_kvxsg"]
+resource_name = "glide"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [15, 16]
+}
+
 [sub_resource type="Animation" id="Animation_oqsja"]
 resource_name = "idle"
 loop_mode = 1
@@ -93,7 +125,39 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [7]
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_uojim"]
+resource_name = "jump"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [9, 10, 11, 12]
+}
+
+[sub_resource type="Animation" id="Animation_82uc4"]
+resource_name = "land"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [13, 14]
 }
 
 [sub_resource type="Animation" id="Animation_0iq6k"]
@@ -110,21 +174,64 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6, 7]
+"values": [1, 2, 3, 4, 5, 6, 7, 8]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2pm6e"]
 _data = {
 "RESET": SubResource("Animation_3ucbu"),
+"fall": SubResource("Animation_klad8"),
+"glide": SubResource("Animation_kvxsg"),
 "idle": SubResource("Animation_oqsja"),
+"jump": SubResource("Animation_uojim"),
+"land": SubResource("Animation_82uc4"),
 "run": SubResource("Animation_0iq6k")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8s67w"]
 animation = &"run"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jjhy3"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bmibe"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w5qim"]
+animation = &"glide"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gmd3u"]
+animation = &"land"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qhr13"]
 animation = &"idle"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_iheke"]
+input_0/name = "jump"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "fall"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_dbd8r"]
+input_0/name = "fall"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "glide"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ai18a"]
+input_0/name = "ground"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "air"
+input_1/auto_advance = false
+input_1/reset = true
+input_2/name = "land"
+input_2/auto_advance = false
+input_2/reset = true
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_n7wox"]
 input_0/name = "idle"
@@ -135,18 +242,33 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5va6m"]
-graph_offset = Vector2(-551.728, 43.8181)
+graph_offset = Vector2(-647.591, -26.7977)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_qhr13")
-nodes/Animation/position = Vector2(-129, 83)
+nodes/Animation/position = Vector2(-260, -80)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_8s67w")
-"nodes/Animation 2/position" = Vector2(-140, 240)
+"nodes/Animation 2/position" = Vector2(-260, 120)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_jjhy3")
+"nodes/Animation 3/position" = Vector2(-480, 340)
+"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_bmibe")
+"nodes/Animation 4/position" = Vector2(-480, 560)
+"nodes/Animation 5/node" = SubResource("AnimationNodeAnimation_w5qim")
+"nodes/Animation 5/position" = Vector2(-480, 740)
+"nodes/Animation 6/node" = SubResource("AnimationNodeAnimation_gmd3u")
+"nodes/Animation 6/position" = Vector2(180, 480)
+nodes/air/node = SubResource("AnimationNodeTransition_iheke")
+nodes/air/position = Vector2(0, 380)
+nodes/fall_type/node = SubResource("AnimationNodeTransition_dbd8r")
+nodes/fall_type/position = Vector2(-240, 580)
+nodes/in_air/node = SubResource("AnimationNodeTransition_ai18a")
+nodes/in_air/position = Vector2(340, 180)
 nodes/movement/node = SubResource("AnimationNodeTransition_n7wox")
-nodes/movement/position = Vector2(120, 160)
-node_connections = [&"movement", 0, &"Animation", &"movement", 1, &"Animation 2", &"output", 0, &"movement"]
+nodes/movement/position = Vector2(0, -20)
+nodes/output/position = Vector2(560, 140)
+node_connections = [&"air", 0, &"Animation 3", &"air", 1, &"fall_type", &"fall_type", 0, &"Animation 4", &"fall_type", 1, &"Animation 5", &"in_air", 0, &"movement", &"in_air", 1, &"air", &"in_air", 2, &"Animation 6", &"movement", 0, &"Animation", &"movement", 1, &"Animation 2", &"output", 0, &"in_air"]
 
 [node name="Root" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("sprite", "timer", "anim_tree")]
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("sprite", "timer", "anim_tree", "anim_player")]
 position = Vector2(278, 198)
 collision_layer = 2
 collision_mask = 5
@@ -158,6 +280,7 @@ sprite = NodePath("Sprite2D")
 timer = NodePath("WallJumpTimer")
 max_fall_speed = 100.0
 anim_tree = NodePath("AnimationTree")
+anim_player = NodePath("AnimationPlayer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_o2pi5")
@@ -166,8 +289,8 @@ shape = SubResource("CapsuleShape2D_o2pi5")
 position = Vector2(-2, 0)
 scale = Vector2(0.57, 0.57)
 texture = ExtResource("2_6rjre")
-hframes = 3
-vframes = 3
+hframes = 5
+vframes = 4
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(2, 2)
@@ -215,6 +338,15 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeBlendTree_5va6m")
 anim_player = NodePath("../AnimationPlayer")
+parameters/air/current_state = "jump"
+parameters/air/transition_request = ""
+parameters/air/current_index = 0
+parameters/fall_type/current_state = "glide"
+parameters/fall_type/transition_request = ""
+parameters/fall_type/current_index = 1
+parameters/in_air/current_state = "air"
+parameters/in_air/transition_request = ""
+parameters/in_air/current_index = 1
 parameters/movement/current_state = "idle"
 parameters/movement/transition_request = ""
 parameters/movement/current_index = 0
