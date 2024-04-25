@@ -25,7 +25,6 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var glide_t: float = 0 # used for lerping glide
 
 func _ready():
-	anim_tree.active = true 
 	current_anim_state = anim_states.idle
 
 func _physics_process(delta):
