@@ -41,7 +41,10 @@ func _physics_process(delta):
 		else:
 			velocity.y += gravity * delta
 			anim_tree.set("parameters/fall_type/transition_request", "fall")
-
+		
+	if velocity.y > 0:
+		anim_tree.set("parameters/air/transition_request", "fall") # not rising, not on floor
+		
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump"):
 		if is_on_floor():
@@ -67,14 +70,13 @@ func _physics_process(delta):
 			anim_tree.set("parameters/air/transition_request", "jump")
 			
 		elif not has_double_jumped and not is_on_floor():
+			# double jump
 			velocity.y = JUMP_VELOCITY
 			has_double_jumped = true
 			anim_tree.set("parameters/in_air/transition_request", "air")
-			anim_tree.set("parameters/air/transition_request", "jump")
-		
-	else:
-		if not is_on_floor():
-			anim_tree.set("parameters/air/transition_request", "fall") # not jumping, not on floor
+			#anim_tree.set("parameters/air/current_state", "jump")
+			anim_player.play("jump")
+	
 		
 	if not is_wall_pushing: # player has not just wall jumped
 	# Get the input direction and handle the movement/deceleration
