@@ -127,8 +127,10 @@ func make_maze():
 				if tile_atlas_coords in hazard_tiles_1: # tile type required is a possible hazard tile
 					if tile_atlas_coords in hazard_tiles_2:
 						atlas_source = randi_range(1, 2) # 2 possible tiles, pick one
+						
 					else:
 						atlas_source = 1
+					print(atlas_source)
 			
 			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) # set tiles to new correct shape
 			Map.set_cell(map_layer, next, atlas_source, id_to_coords(next_walls))
