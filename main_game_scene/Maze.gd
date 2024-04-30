@@ -121,6 +121,7 @@ func make_maze():
 			
 			# insert hazards here:
 			var atlas_source: int = 0 # use normal atlas by default
+			var next_atlas_source = 0
 			
 			if randi_range(0, 1) == 1: # may or may not set hazard tile
 				var tile_atlas_coords = id_to_coords(current_walls)
@@ -130,10 +131,17 @@ func make_maze():
 						
 					else:
 						atlas_source = 1
-					print(atlas_source)
+				# possible that current and next need different atlas sources
+				var next_atlas_coords = id_to_coords(next_walls)
+				if next_atlas_coords in hazard_tiles_1:
+					if next_atlas_coords in hazard_tiles_2:
+						next_atlas_source = randi_range(1, 2)
+						
+					else:
+						next_atlas_source = 1
 			
 			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) # set tiles to new correct shape
-			Map.set_cell(map_layer, next, atlas_source, id_to_coords(next_walls))
+			Map.set_cell(map_layer, next, next_atlas_source, id_to_coords(next_walls))
 			
 			current = next
 			unvisited.erase(current) # we have visited a new tile
