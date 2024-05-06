@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://de2pejtnvmf7q"]
+
+[ext_resource type="Script" path="res://title_scene/title_menu.gd" id="1_vyfet"]
+
+[node name="Title" type="Node2D"]
+
+[node name="Canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("settings_button")]
+script = ExtResource("1_vyfet")
+settings_button = NodePath("Settings")
+
+[node name="tempbg" type="ColorRect" parent="Canvas"]
+offset_right = 1159.0
+offset_bottom = 656.0
+color = Color(0.0745098, 0.360784, 0.360784, 1)
+
+[node name="Start" type="Button" parent="Canvas"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 37.0
+offset_right = 150.0
+offset_bottom = 112.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(150, 37.5)
+theme_override_font_sizes/font_size = 48
+text = "Start"
+
+[node name="Quit" type="Button" parent="Canvas"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 147.0
+offset_right = 150.0
+offset_bottom = 222.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(150, 37.5)
+theme_override_font_sizes/font_size = 48
+text = "Quit"
+
+[node name="Settings" type="Button" parent="Canvas"]
+offset_left = 59.0
+offset_top = 41.0
+offset_right = 173.0
+offset_bottom = 155.0
+pivot_offset = Vector2(57, 57)
+
+[node name="tempTitle" type="RichTextLabel" parent="Canvas"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -294.0
+offset_top = -271.0
+offset_right = 294.0
+offset_bottom = -125.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(294, 73)
+theme_override_font_sizes/normal_font_size = 100
+text = "Tunnel Bird"
+
+[connection signal="button_up" from="Canvas/Start" to="Canvas" method="_on_start_button_up"]
+[connection signal="button_up" from="Canvas/Quit" to="Canvas" method="_on_quit_button_up"]
