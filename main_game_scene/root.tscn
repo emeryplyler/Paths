@@ -109,7 +109,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [21, 24]
+"values": [24, 25]
 }
 
 [sub_resource type="Animation" id="Animation_oqsja"]
@@ -173,7 +173,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [25, 26, 27, 28, 29, 30]
+"values": [26, 27, 28, 29, 30, 31]
 }
 
 [sub_resource type="Animation" id="Animation_0iq6k"]
@@ -259,7 +259,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5va6m"]
-graph_offset = Vector2(-546.325, 107.031)
+graph_offset = Vector2(-477.607, 134.343)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_qhr13")
 nodes/Animation/position = Vector2(-260, -80)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_8s67w")
