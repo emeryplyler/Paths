@@ -101,15 +101,17 @@ func _physics_process(delta):
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			if is_on_floor():
 				# wait for landing animation to finish?
-				if not (anim_tree.get("parameters/in_air/current_state") == "land"):
-					anim_tree.set("parameters/in_air/transition_request", "ground")
-					anim_tree.set("parameters/movement/transition_request", "idle")
+				anim_tree.set("parameters/in_air/transition_request", "ground")
+				anim_tree.set("parameters/movement/transition_request", "idle")
 	
 	if is_on_floor():
 		if falling:
 			falling = false
-			# set anim tree to land
-			anim_tree.set("parameters/in_air/transition_request", "land")
+			# fire oneshot
+			anim_tree.set("parameters/landing/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		#elif not falling and not (anim_tree.get("parameters/in_air/current_state") == "land") and velocity.x == 0:
+			#anim_tree.set("parameters/in_air/transition_request", "ground")
+			#anim_tree.set("parameters/movement/transition_request", "idle")
 
 	move_and_slide()
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=33 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://dfufq4rhw60f8" path="res://assets/player/playeratlas.png" id="2_cled6"]
@@ -246,9 +246,8 @@ input_0/reset = true
 input_1/name = "air"
 input_1/auto_advance = false
 input_1/reset = true
-input_2/name = "land"
-input_2/auto_advance = false
-input_2/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_gmsnp"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_n7wox"]
 input_0/name = "idle"
@@ -259,7 +258,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5va6m"]
-graph_offset = Vector2(-477.607, 134.343)
+graph_offset = Vector2(-252.611, 95.1658)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_qhr13")
 nodes/Animation/position = Vector2(-260, -80)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_8s67w")
@@ -278,10 +277,12 @@ nodes/fall_type/node = SubResource("AnimationNodeTransition_dbd8r")
 nodes/fall_type/position = Vector2(-240, 580)
 nodes/in_air/node = SubResource("AnimationNodeTransition_ai18a")
 nodes/in_air/position = Vector2(340, 180)
+nodes/landing/node = SubResource("AnimationNodeOneShot_gmsnp")
+nodes/landing/position = Vector2(540, 140)
 nodes/movement/node = SubResource("AnimationNodeTransition_n7wox")
 nodes/movement/position = Vector2(0, -20)
-nodes/output/position = Vector2(560, 140)
-node_connections = [&"air", 0, &"Animation 3", &"air", 1, &"fall_type", &"fall_type", 0, &"Animation 4", &"fall_type", 1, &"Animation 5", &"in_air", 0, &"movement", &"in_air", 1, &"air", &"in_air", 2, &"Animation 6", &"movement", 0, &"Animation", &"movement", 1, &"Animation 2", &"output", 0, &"in_air"]
+nodes/output/position = Vector2(760, 140)
+node_connections = [&"air", 0, &"Animation 3", &"air", 1, &"fall_type", &"fall_type", 0, &"Animation 4", &"fall_type", 1, &"Animation 5", &"in_air", 0, &"movement", &"in_air", 1, &"air", &"landing", 0, &"in_air", &"landing", 1, &"Animation 6", &"movement", 0, &"Animation", &"movement", 1, &"Animation 2", &"output", 0, &"landing"]
 
 [node name="Root" type="Node2D"]
 
@@ -366,6 +367,9 @@ parameters/fall_type/current_index = 1
 parameters/in_air/current_state = "air"
 parameters/in_air/transition_request = ""
 parameters/in_air/current_index = 1
+parameters/landing/active = false
+parameters/landing/internal_active = false
+parameters/landing/request = 0
 parameters/movement/current_state = "idle"
 parameters/movement/transition_request = ""
 parameters/movement/current_index = 0
