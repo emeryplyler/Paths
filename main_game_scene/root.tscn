@@ -1,11 +1,15 @@
-[gd_scene load_steps=33 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=38 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://dfufq4rhw60f8" path="res://assets/player/playeratlas.png" id="2_cled6"]
 [ext_resource type="Script" path="res://main_game_scene/scene_transitions.gd" id="3_5nyt0"]
 [ext_resource type="Script" path="res://main_game_scene/Maze.gd" id="3_jxabw"]
 [ext_resource type="PackedScene" uid="uid://d35hjqhp0ikpm" path="res://interactables/portal/portal.tscn" id="4_ftpbv"]
+[ext_resource type="Shader" path="res://main_game_scene/blur.gdshader" id="4_scyuc"]
 [ext_resource type="TileSet" uid="uid://c6ihmqc6xrg2o" path="res://assets/environment/defaultwallstileset.tres" id="5_hn2qt"]
+[ext_resource type="Texture2D" uid="uid://dgg2txturnlpp" path="res://assets/environment/white_square.png" id="6_nblua"]
+[ext_resource type="Texture2D" uid="uid://dkfjcf1dvqfpn" path="res://assets/environment/back.png" id="7_5a7f6"]
+[ext_resource type="Texture2D" uid="uid://c4ovq0o4kjeua" path="res://assets/environment/para1.png" id="8_01bof"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o2pi5"]
 radius = 17.55
@@ -64,6 +68,10 @@ _data = {
 "fading_to_black": SubResource("Animation_6gmpk"),
 "unfading": SubResource("Animation_ereci")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nb86v"]
+shader = ExtResource("4_scyuc")
+shader_parameter/blur = 3.135
 
 [sub_resource type="Animation" id="Animation_3ucbu"]
 length = 0.001
@@ -258,7 +266,6 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5va6m"]
-graph_offset = Vector2(-252.611, 95.1658)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_qhr13")
 nodes/Animation/position = Vector2(-260, -80)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_8s67w")
@@ -335,6 +342,29 @@ color = Color(0, 0, 0, 0)
 libraries = {
 "": SubResource("AnimationLibrary_8y74v")
 }
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Player/Camera2D/CanvasLayer"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Player/Camera2D/CanvasLayer/ParallaxBackground"]
+position = Vector2(0, 358)
+motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(1152, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/Camera2D/CanvasLayer/ParallaxBackground/ParallaxLayer"]
+texture = ExtResource("7_5a7f6")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/Camera2D/CanvasLayer/ParallaxBackground"]
+material = SubResource("ShaderMaterial_nb86v")
+scale = Vector2(100, 100)
+texture = ExtResource("6_nblua")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="Player/Camera2D/CanvasLayer/ParallaxBackground"]
+position = Vector2(0, 358)
+motion_scale = Vector2(0.2, 0.1)
+motion_mirroring = Vector2(1152, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/Camera2D/CanvasLayer/ParallaxBackground/ParallaxLayer2"]
+texture = ExtResource("8_01bof")
 
 [node name="WallJumpTimer" type="Timer" parent="Player"]
 wait_time = 0.13
