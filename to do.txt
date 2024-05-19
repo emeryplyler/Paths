@@ -1,0 +1,26 @@
+to do:
+
+- enemies? food?
+
+- player animations
+- player: going into portal animation
+- parallax background
+
+
+---------------------------------
+done:
+
+- collision on tunnels
+- tunnel textures
+- get object to generate with certain tiles or in certain place
+- create new maze when player gets to the object (and teleport player to start coords?)
+- randomize starting coordinates in maze
+- reintroduce gravity and jumping
+- wall jumping? flapping? avian?
+- simple player texture
+- hazards? 
+- hazards teleport player back to starting location
+- fade to black or transition when player reaches portal
+- press shift or something to glide?/slow fall?
+- more polished tileset sprites
+

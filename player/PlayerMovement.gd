@@ -104,11 +104,11 @@ func _physics_process(delta):
 				anim_tree.set("parameters/in_air/transition_request", "ground")
 				anim_tree.set("parameters/movement/transition_request", "idle")
 	
-	if is_on_floor():
-		if falling:
-			falling = false
-			# fire oneshot
-			anim_tree.set("parameters/landing/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	#if is_on_floor():
+		#if falling:
+			#falling = false
+			## fire oneshot
+			#anim_tree.set("parameters/landing/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		#elif not falling and not (anim_tree.get("parameters/in_air/current_state") == "land") and velocity.x == 0:
 			#anim_tree.set("parameters/in_air/transition_request", "ground")
 			#anim_tree.set("parameters/movement/transition_request", "idle")

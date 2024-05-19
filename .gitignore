@@ -11,5 +11,4 @@ export_presets.cfg
 data_*/
 
 # Project Specific ignores
-to do.txt
 donotcommit/
