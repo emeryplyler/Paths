@@ -1,10 +1,14 @@
 to do:
 
-- enemies? food?
+- add lives and food to refill lives
+- enemies? keys?
 
-- player animations
+- player glide animation
+- player wall jump animation
 - player: going into portal animation
 - parallax background
+- ...sound effects?
+- music
 
 
 ---------------------------------
@@ -23,4 +27,5 @@ done:
 - fade to black or transition when player reaches portal
 - press shift or something to glide?/slow fall?
 - more polished tileset sprites
-
+- fix collision on tiles
+- display number of rooms passed through/ room number

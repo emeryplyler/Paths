@@ -366,6 +366,14 @@ motion_mirroring = Vector2(1152, 0)
 [node name="Sprite2D" type="Sprite2D" parent="Player/Camera2D/CanvasLayer/ParallaxBackground/ParallaxLayer2"]
 texture = ExtResource("8_01bof")
 
+[node name="Label" type="Label" parent="Player/Camera2D/CanvasLayer"]
+offset_left = 25.0
+offset_top = 19.0
+offset_right = 375.0
+offset_bottom = 117.0
+theme_override_font_sizes/font_size = 30
+text = "Room 15"
+
 [node name="WallJumpTimer" type="Timer" parent="Player"]
 wait_time = 0.13
 
@@ -404,12 +412,13 @@ parameters/movement/current_state = "idle"
 parameters/movement/transition_request = ""
 parameters/movement/current_index = 0
 
-[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam")]
+[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam", "passes_label")]
 script = ExtResource("3_jxabw")
 Map = NodePath("TileMap")
 Player = NodePath("../Player")
 Cam = NodePath("../Player/Camera2D")
 Portal = ExtResource("4_ftpbv")
+passes_label = NodePath("../Player/Camera2D/CanvasLayer/Label")
 
 [node name="TileMap" type="TileMap" parent="Maze"]
 tile_set = ExtResource("5_hn2qt")

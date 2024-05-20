@@ -24,6 +24,7 @@ var starting_spot = Vector2(0, 0)
 @export var Cam: Camera2D
 
 @export var Portal: PackedScene # object takes player to next maze
+@export var passes_label: Label
 
 var current_portal_inst # will store reference to the portal spawned in
 
@@ -40,6 +41,9 @@ func _ready():
 # create a level
 func level_gen():
 	randomize()
+	
+	# display current number of passes
+	passes_label.text = "Room " + str(passes) # just let it start at 0, it's fine
 	
 	width = start_size + (passes / 2)
 	height = start_size + (passes / 2)
