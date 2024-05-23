@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=39 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://dfufq4rhw60f8" path="res://assets/player/playeratlas.png" id="2_cled6"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dgg2txturnlpp" path="res://assets/environment/white_square.png" id="6_nblua"]
 [ext_resource type="Texture2D" uid="uid://dkfjcf1dvqfpn" path="res://assets/environment/back.png" id="7_5a7f6"]
 [ext_resource type="Texture2D" uid="uid://c4ovq0o4kjeua" path="res://assets/environment/para1.png" id="8_01bof"]
+[ext_resource type="Texture2D" uid="uid://cbnvxcglgs1o7" path="res://assets/player/player_health.png" id="8_ixdf4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o2pi5"]
 radius = 17.55
@@ -327,11 +328,12 @@ limit_bottom = 1920
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Player/Camera2D" node_paths=PackedStringArray("black_screen", "maze", "animator")]
+[node name="CanvasLayer" type="CanvasLayer" parent="Player/Camera2D" node_paths=PackedStringArray("black_screen", "maze", "animator", "health_bar")]
 script = ExtResource("3_5nyt0")
 black_screen = NodePath("BlackScreen")
 maze = NodePath("../../../Maze")
 animator = NodePath("BlackScreen/AnimationPlayer")
+health_bar = NodePath("Health/TextureRect")
 
 [node name="BlackScreen" type="ColorRect" parent="Player/Camera2D/CanvasLayer"]
 offset_right = 1920.0
@@ -373,6 +375,22 @@ offset_right = 375.0
 offset_bottom = 117.0
 theme_override_font_sizes/font_size = 30
 text = "Room 15"
+
+[node name="Health" type="Control" parent="Player/Camera2D/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 23.0
+offset_top = 71.0
+offset_right = 63.0
+offset_bottom = 111.0
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/CanvasLayer/Health"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 206.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("8_ixdf4")
+stretch_mode = 1
 
 [node name="WallJumpTimer" type="Timer" parent="Player"]
 wait_time = 0.13

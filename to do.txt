@@ -5,6 +5,7 @@ to do:
 
 - player glide animation
 - player wall jump animation
+- portal animation
 - player: going into portal animation
 - parallax background
 - ...sound effects?

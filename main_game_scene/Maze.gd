@@ -22,6 +22,7 @@ var starting_spot = Vector2(0, 0)
 
 @export var Player: CharacterBody2D
 @export var Cam: Camera2D
+var player_health: int = 3
 
 @export var Portal: PackedScene # object takes player to next maze
 @export var passes_label: Label
@@ -170,10 +171,15 @@ func _on_player_entered_portal():
 
 func _on_hazard_detector_body_entered(body):
 	# respawn player at start
+	player_health -= 1
 	player_died.emit()
 
 
 func _on_animation_player_animation_changed(old_name, new_name):
-	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
-	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
-	Player.velocity = Vector2.ZERO # no momentum
+	if player_health <= 0:
+		# go to game over screen
+		print("YOU DIED")
+	else:
+		Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
+		Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
+		Player.velocity = Vector2.ZERO # no momentum
