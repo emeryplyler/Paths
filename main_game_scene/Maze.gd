@@ -11,10 +11,10 @@ const hazard_tiles_2 = [Vector2(1, 1), Vector2(2, 2)]
 
 const tile_size = 384
 const start_size = 5
-var width = 5
+var width = 5 # these will become larger over time
 var height = 5
 
-var passes: int = 0
+var passes: int = 0 # current score
 
 @export var Map: TileMap
 var map_layer = 0
@@ -22,10 +22,13 @@ var starting_spot = Vector2(0, 0)
 
 @export var Player: CharacterBody2D
 @export var Cam: Camera2D
-var player_health: int = 3
+var player_health: int = 3 # current health, init at 3
 
 @export var Portal: PackedScene # object takes player to next maze
 @export var passes_label: Label
+
+@export var BlackScreenAnimator: CanvasLayer
+@export var GameOverScreen: Control
 
 var current_portal_inst # will store reference to the portal spawned in
 
@@ -34,9 +37,12 @@ var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 				  Vector2(0, 1): S, Vector2(-1, 0): W}
 
 signal player_died
+signal player_respawn # used for playing the fade in animation after respawning
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	BlackScreenAnimator.game_over.connect(_on_game_over) # signal sent from animator for timing death sequence
+	GameOverScreen.set_visible(false) # make sure game over screen is not showing
 	level_gen()
 
 # create a level
@@ -73,7 +79,7 @@ func make_portal(pos:Vector2):
 		print("Position: ", pos)
 
 func destroy_portal():
-	call_deferred("remove_child", current_portal_inst) # godot gets mad if this isn't deferred also
+	call_deferred("remove_child", current_portal_inst) # godot gets mad if this isn't deferred 
 	#remove_child(current_portal_inst)
 	current_portal_inst.queue_free()
 
@@ -164,23 +170,40 @@ func make_maze():
 
 func _on_player_entered_portal():
 	passes += 1
+	Player.velocity = Vector2.ZERO # reset velocity
 	destroy_portal()
-	# TODO: do save data right here or something
 	level_gen()
 
 
 func _on_hazard_detector_body_entered(body):
 	# respawn player at start
 	player_health -= 1
-	player_died.emit()
-	# TODO: do we need an invincibility timer?
+	player_died.emit() # trigger animations
+	# NOTE: do we need an invincibility timer?
 
-
+# I think this is fires right after the first fade to black animation is finished?
+# The same time as the fade back in animation begins
 func _on_animation_player_animation_changed(old_name, new_name):
-	if player_health <= 0:
-		# go to game over screen
-		print("YOU DIED")
-	else:
-		Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
-		Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
-		Player.velocity = Vector2.ZERO # no momentum
+	respawn_player()
+
+func _on_game_over():
+	GameOverScreen.set_visible(true) # time to do game over screen
+
+func _on_retry_button_up():
+	respawn_player()
+	player_health = 3
+	player_respawn.emit() # signal to animator to fade out the black screen
+	GameOverScreen.set_visible(false)
+	# reset level and score?
+	passes = 0
+	destroy_portal() # THIS PART IS IMPORTANT! reset portal location
+	level_gen()
+
+func respawn_player():
+	Player.position = to_global(Map.map_to_local(starting_spot)) # teleport player to starting place
+	Player.get_node("Camera2D").reset_smoothing() # prevent camera from sliding over to player from prev pos
+	Player.velocity = Vector2.ZERO # reset momentum
+
+
+func _on_title_screen_button_up():
+	get_tree().change_scene_to_file("res://title_scene/title.tscn")

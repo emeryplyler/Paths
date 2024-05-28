@@ -6,16 +6,9 @@ var tree
 func _ready():
 	tree = get_tree()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
 func _on_start_button_up():
 	#call_deferred("reset_scene")
 	tree.change_scene_to_file("res://main_game_scene/root.tscn")
-
 
 func _on_quit_button_up():
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)

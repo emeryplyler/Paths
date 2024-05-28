@@ -7,15 +7,25 @@ extends Node
 
 var heart_size: int
 
+signal game_over
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	maze.player_died.connect(_on_player_died)
-	heart_size = 200
-	health_bar.size.x = heart_size * maze.player_health
-	# change health_bar.size.x to heart_size * health (3?)
+	maze.player_respawn.connect(_on_player_respawn)
+	heart_size = 200 # match this to width of heart sprite
+	health_bar.size.x = heart_size * maze.player_health # health bar init
 
 func _on_player_died():
 	animator.queue("fading_to_black")
+	health_bar.size.x = heart_size * maze.player_health
+	if maze.player_health <= 0:
+		game_over.emit()
+	else:
+		animator.queue("unfading")
+		 # update health bar
+	
+func _on_player_respawn():
 	animator.queue("unfading")
 	health_bar.size.x = heart_size * maze.player_health
 

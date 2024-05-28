@@ -390,10 +390,10 @@ offset_right = 200.0
 offset_bottom = 206.0
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("8_ixdf4")
+expand_mode = 1
 stretch_mode = 1
 
 [node name="GameOver" type="Control" parent="Player/Camera2D/CanvasLayer"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -401,7 +401,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Player/Camera2D/CanvasLayer/GameOver"]
+[node name="YouDied" type="RichTextLabel" parent="Player/Camera2D/CanvasLayer/GameOver"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -417,21 +417,37 @@ grow_vertical = 2
 theme_override_font_sizes/normal_font_size = 51
 text = "You died"
 
-[node name="Button" type="Button" parent="Player/Camera2D/CanvasLayer/GameOver"]
+[node name="Retry" type="Button" parent="Player/Camera2D/CanvasLayer/GameOver"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -132.0
-offset_top = -310.0
-offset_right = 133.0
-offset_bottom = -212.0
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = 5.0
+offset_right = 132.5
+offset_bottom = 103.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Retry"
+
+[node name="TitleScreen" type="Button" parent="Player/Camera2D/CanvasLayer/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = 150.0
+offset_right = 132.5
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Title Screen"
 
 [node name="WallJumpTimer" type="Timer" parent="Player"]
 wait_time = 0.13
@@ -471,13 +487,15 @@ parameters/movement/current_state = "idle"
 parameters/movement/transition_request = ""
 parameters/movement/current_index = 0
 
-[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam", "passes_label")]
+[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam", "passes_label", "BlackScreenAnimator", "GameOverScreen")]
 script = ExtResource("3_jxabw")
 Map = NodePath("TileMap")
 Player = NodePath("../Player")
 Cam = NodePath("../Player/Camera2D")
 Portal = ExtResource("4_ftpbv")
 passes_label = NodePath("../Player/Camera2D/CanvasLayer/Label")
+BlackScreenAnimator = NodePath("../Player/Camera2D/CanvasLayer")
+GameOverScreen = NodePath("../Player/Camera2D/CanvasLayer/GameOver")
 
 [node name="TileMap" type="TileMap" parent="Maze"]
 tile_set = ExtResource("5_hn2qt")
@@ -485,5 +503,7 @@ format = 2
 layer_0/name = "Walls"
 
 [connection signal="animation_changed" from="Player/Camera2D/CanvasLayer/BlackScreen/AnimationPlayer" to="Maze" method="_on_animation_player_animation_changed"]
+[connection signal="button_up" from="Player/Camera2D/CanvasLayer/GameOver/Retry" to="Maze" method="_on_retry_button_up"]
+[connection signal="button_up" from="Player/Camera2D/CanvasLayer/GameOver/TitleScreen" to="Maze" method="_on_title_screen_button_up"]
 [connection signal="timeout" from="Player/WallJumpTimer" to="Player" method="_on_wall_jump_timer_timeout"]
 [connection signal="body_entered" from="Player/HazardDetector" to="Maze" method="_on_hazard_detector_body_entered"]
