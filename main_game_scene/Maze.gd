@@ -173,6 +173,7 @@ func _on_hazard_detector_body_entered(body):
 	# respawn player at start
 	player_health -= 1
 	player_died.emit()
+	# TODO: do we need an invincibility timer?
 
 
 func _on_animation_player_animation_changed(old_name, new_name):

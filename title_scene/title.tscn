@@ -9,8 +9,8 @@ script = ExtResource("1_vyfet")
 settings_button = NodePath("Settings")
 
 [node name="tempbg" type="ColorRect" parent="Canvas"]
-offset_right = 1159.0
-offset_bottom = 656.0
+offset_right = 2378.0
+offset_bottom = 1377.0
 color = Color(0.0745098, 0.360784, 0.360784, 1)
 
 [node name="Start" type="Button" parent="Canvas"]
