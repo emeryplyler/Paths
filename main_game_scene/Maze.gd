@@ -25,6 +25,7 @@ var starting_spot = Vector2(0, 0)
 var player_health: int = 3 # current health, init at 3
 
 @export var Portal: PackedScene # object takes player to next maze
+@export var Berries: PackedScene # the healing item
 @export var passes_label: Label
 
 @export var BlackScreenAnimator: CanvasLayer
@@ -38,10 +39,13 @@ var cell_walls = {Vector2(0, -1): N, Vector2(1, 0): E,
 
 signal player_died
 signal player_respawn # used for playing the fade in animation after respawning
+signal berry_pickup # used for healing berry pickup event
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	BlackScreenAnimator.game_over.connect(_on_game_over) # signal sent from animator for timing death sequence
+	#var berry_inst = Berries.instantiate()
+	#berry_inst.picked_up_berries.connect(_on_berry_pickup)
 	GameOverScreen.set_visible(false) # make sure game over screen is not showing
 	level_gen()
 
@@ -82,6 +86,21 @@ func destroy_portal():
 	call_deferred("remove_child", current_portal_inst) # godot gets mad if this isn't deferred 
 	#remove_child(current_portal_inst)
 	current_portal_inst.queue_free()
+
+func make_berries(pos: Vector2):
+	var new_berries: Node2D = Berries.instantiate()
+	new_berries.position = pos
+	call_deferred("add_child", new_berries)
+	if new_berries and not new_berries.picked_up_berries.is_connected(_on_berry_pickup):
+		new_berries.picked_up_berries.connect(_on_berry_pickup)
+
+
+func destroy_all_berries():
+	var mazenode = get_node(".")
+	for item in mazenode.get_children():
+		if item is Berry:
+			call_deferred("remove_child", item)
+			item.queue_free()
 
 # small functions because tilesets work differently in godot 4 than 3
 func id_to_coords(id:int):
@@ -151,7 +170,15 @@ func make_maze():
 					else:
 						next_atlas_source = 1
 			
-			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) # set tiles to new correct shape
+			
+			# make berries
+			if randi_range(0, 5) == 1:
+				var berry_position = to_global(Map.map_to_local(current))
+				make_berries(berry_position)
+			
+			
+			# set tiles to new correct shape
+			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) 
 			Map.set_cell(map_layer, next, next_atlas_source, id_to_coords(next_walls))
 			
 			current = next
@@ -165,13 +192,23 @@ func make_maze():
 				var portal_position = to_global(Map.map_to_local(portal_tile)) # calculate where to spawn the portal in
 				make_portal(portal_position)
 				placed_portal = true
+				
 			current = stack.pop_back()
+			
+			
+		elif neighbors.size() <= 0 and not stack and not placed_portal:
+			# rare case - no neighbors, no stack, no portal
+			var portal_position = to_global(Map.map_to_local(portal_tile))
+			make_portal(portal_position)
+			placed_portal = true
+			print("h")
 
 
 func _on_player_entered_portal():
 	passes += 1
 	Player.velocity = Vector2.ZERO # reset velocity
 	destroy_portal()
+	destroy_all_berries()
 	level_gen()
 
 
@@ -180,6 +217,10 @@ func _on_hazard_detector_body_entered(body):
 	player_health -= 1
 	player_died.emit() # trigger animations
 	# NOTE: do we need an invincibility timer?
+
+func _on_berry_pickup():
+	player_health += 1
+	berry_pickup.emit()
 
 # I think this is fires right after the first fade to black animation is finished?
 # The same time as the fade back in animation begins

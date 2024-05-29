@@ -13,6 +13,7 @@ signal game_over
 func _ready():
 	maze.player_died.connect(_on_player_died)
 	maze.player_respawn.connect(_on_player_respawn)
+	maze.berry_pickup.connect(_on_berry_pickup)
 	heart_size = 200 # match this to width of heart sprite
 	health_bar.size.x = heart_size * maze.player_health # health bar init
 
@@ -27,6 +28,10 @@ func _on_player_died():
 	
 func _on_player_respawn():
 	animator.queue("unfading")
+	health_bar.size.x = heart_size * maze.player_health
+	
+func _on_berry_pickup():
+	# insert sound effect here
 	health_bar.size.x = heart_size * maze.player_health
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

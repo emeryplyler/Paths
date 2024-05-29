@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=40 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://dfufq4rhw60f8" path="res://assets/player/playeratlas.png" id="2_cled6"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dkfjcf1dvqfpn" path="res://assets/environment/back.png" id="7_5a7f6"]
 [ext_resource type="Texture2D" uid="uid://c4ovq0o4kjeua" path="res://assets/environment/para1.png" id="8_01bof"]
 [ext_resource type="Texture2D" uid="uid://cbnvxcglgs1o7" path="res://assets/player/player_health.png" id="8_ixdf4"]
+[ext_resource type="PackedScene" uid="uid://dbvpesy5un5kv" path="res://interactables/berries/berries.tscn" id="11_74i73"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o2pi5"]
 radius = 17.55
@@ -394,6 +395,7 @@ expand_mode = 1
 stretch_mode = 1
 
 [node name="GameOver" type="Control" parent="Player/Camera2D/CanvasLayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -493,6 +495,7 @@ Map = NodePath("TileMap")
 Player = NodePath("../Player")
 Cam = NodePath("../Player/Camera2D")
 Portal = ExtResource("4_ftpbv")
+Berries = ExtResource("11_74i73")
 passes_label = NodePath("../Player/Camera2D/CanvasLayer/Label")
 BlackScreenAnimator = NodePath("../Player/Camera2D/CanvasLayer")
 GameOverScreen = NodePath("../Player/Camera2D/CanvasLayer/GameOver")
