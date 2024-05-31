@@ -176,14 +176,6 @@ func make_maze():
 					else:
 						next_atlas_source = 1
 			
-			
-			# make berries
-			if randi_range(0, 8) == 1 and berries_placed < max_berries:
-				var berry_position = to_global(Map.map_to_local(current))
-				make_berries(berry_position)
-				berries_placed += 1
-			
-			
 			# set tiles to new correct shape
 			Map.set_cell(map_layer, current, atlas_source, id_to_coords(current_walls)) 
 			Map.set_cell(map_layer, next, next_atlas_source, id_to_coords(next_walls))
@@ -194,6 +186,13 @@ func make_maze():
 			if not placed_portal:
 				portal_tile = current # save this location for placing portal
 			
+			# make berries
+			if randi_range(0, 8) == 1 and berries_placed < max_berries and current != portal_tile and current != starting_spot:
+				var berry_position = to_global(Map.map_to_local(current))
+				make_berries(berry_position)
+				berries_placed += 1
+				
+				
 		elif stack: # no neighbors to go to, but somethings in the stack
 			if not placed_portal:
 				var portal_position = to_global(Map.map_to_local(portal_tile)) # calculate where to spawn the portal in
@@ -208,7 +207,7 @@ func make_maze():
 			var portal_position = to_global(Map.map_to_local(portal_tile))
 			make_portal(portal_position)
 			placed_portal = true
-			print("h")
+			print("It happened")
 
 
 func _on_player_entered_portal():
