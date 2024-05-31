@@ -27,7 +27,7 @@ var player_health: int = 3 # current health, init at 3
 @export var Portal: PackedScene # object takes player to next maze
 @export var Berries: PackedScene # the healing item
 @export var passes_label: Label
-@export var max_berries: int = 2 # max num of berries spawned per level
+@export var max_berries: int # max num of berries spawned per level
 
 @export var BlackScreenAnimator: CanvasLayer
 @export var GameOverScreen: Control
@@ -61,6 +61,9 @@ func level_gen():
 	height = start_size + (passes / 2)
 	Cam.limit_right = width * tile_size
 	Cam.limit_bottom = height * tile_size
+	
+	# set max berries for this level
+	max_berries = floori(width / 3)
 	
 	# read saved data
 	
