@@ -74,6 +74,7 @@ func level_gen():
 	else:
 		current_portal_inst.player_entered_portal.connect(_on_player_entered_portal)
 
+
 func make_portal(pos:Vector2):
 	var new_portal:Node = Portal.instantiate()
 	new_portal.position = pos
@@ -95,13 +96,13 @@ func make_berries(pos: Vector2):
 	if new_berries and not new_berries.picked_up_berries.is_connected(_on_berry_pickup):
 		new_berries.picked_up_berries.connect(_on_berry_pickup)
 
-
 func destroy_all_berries():
 	var mazenode = get_node(".")
 	for item in mazenode.get_children():
 		if item is Berry:
 			call_deferred("remove_child", item)
 			item.queue_free()
+
 
 # small functions because tilesets work differently in godot 4 than 3
 func id_to_coords(id:int):
@@ -213,7 +214,6 @@ func _on_player_entered_portal():
 	destroy_portal()
 	destroy_all_berries()
 	level_gen()
-
 
 func _on_hazard_detector_body_entered(body):
 	# respawn player at start
