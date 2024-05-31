@@ -27,6 +27,7 @@ var player_health: int = 3 # current health, init at 3
 @export var Portal: PackedScene # object takes player to next maze
 @export var Berries: PackedScene # the healing item
 @export var passes_label: Label
+@export var max_berries: int = 2 # max num of berries spawned per level
 
 @export var BlackScreenAnimator: CanvasLayer
 @export var GameOverScreen: Control
@@ -125,6 +126,7 @@ func make_maze():
 	var unvisited = []
 	var stack = [] # homemade stack structure
 	var placed_portal: bool = false
+	var berries_placed: int = 0
 	
 	# first we fill the map with solid tiles
 	Map.clear()
@@ -172,9 +174,10 @@ func make_maze():
 			
 			
 			# make berries
-			if randi_range(0, 5) == 1:
+			if randi_range(0, 8) == 1 and berries_placed < max_berries:
 				var berry_position = to_global(Map.map_to_local(current))
 				make_berries(berry_position)
+				berries_placed += 1
 			
 			
 			# set tiles to new correct shape

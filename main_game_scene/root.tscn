@@ -497,6 +497,7 @@ Cam = NodePath("../Player/Camera2D")
 Portal = ExtResource("4_ftpbv")
 Berries = ExtResource("11_74i73")
 passes_label = NodePath("../Player/Camera2D/CanvasLayer/Label")
+max_berries = 3
 BlackScreenAnimator = NodePath("../Player/Camera2D/CanvasLayer")
 GameOverScreen = NodePath("../Player/Camera2D/CanvasLayer/GameOver")
 
