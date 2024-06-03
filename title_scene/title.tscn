@@ -1,12 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://de2pejtnvmf7q"]
+[gd_scene load_steps=3 format=3 uid="uid://de2pejtnvmf7q"]
 
 [ext_resource type="Script" path="res://title_scene/title_menu.gd" id="1_vyfet"]
+[ext_resource type="Texture2D" uid="uid://ds8nruojyfu4k" path="res://assets/ui/settings.png" id="2_rs6as"]
 
 [node name="Title" type="Node2D"]
 
-[node name="Canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("settings_button")]
+[node name="Canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("settings_button", "settings_menu", "darken_bg")]
 script = ExtResource("1_vyfet")
 settings_button = NodePath("Settings")
+settings_menu = NodePath("SettingsMenu")
+darken_bg = NodePath("DarkenBg")
 
 [node name="tempbg" type="ColorRect" parent="Canvas"]
 offset_right = 2378.0
@@ -51,6 +54,7 @@ offset_top = 41.0
 offset_right = 173.0
 offset_bottom = 155.0
 pivot_offset = Vector2(57, 57)
+icon = ExtResource("2_rs6as")
 
 [node name="tempTitle" type="RichTextLabel" parent="Canvas"]
 anchors_preset = 8
@@ -68,5 +72,117 @@ pivot_offset = Vector2(294, 73)
 theme_override_font_sizes/normal_font_size = 100
 text = "Tunnel Bird"
 
+[node name="PopupMenu" type="PopupMenu" parent="Canvas"]
+
+[node name="DarkenBg" type="ColorRect" parent="Canvas"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1135.0
+offset_top = -648.0
+offset_right = 1135.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.803922)
+
+[node name="SettingsMenu" type="Control" parent="Canvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Canvas/SettingsMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="TabContainer" type="TabContainer" parent="Canvas/SettingsMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="Settings" type="MarginContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 45
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 45
+theme_override_constants/margin_bottom = 35
+
+[node name="Menu" type="GridContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 2
+
+[node name="VolumeLabel" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
+layout_mode = 2
+text = "Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Volume" type="HSlider" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
+layout_mode = 2
+
+[node name="DisableHealthLabel" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
+layout_mode = 2
+text = "Disable Health"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DisableHealth" type="CheckButton" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+
+[node name="Keybinds" type="MarginContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 45
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 45
+theme_override_constants/margin_bottom = 35
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds"]
+layout_mode = 2
+
+[node name="Keybinds" type="VBoxContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds"]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_right = 60
+
+[node name="HSplitContainer" type="HSplitContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds/MarginContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Glide"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds/MarginContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Shift"
+icon_alignment = 1
+
 [connection signal="button_up" from="Canvas/Start" to="Canvas" method="_on_start_button_up"]
 [connection signal="button_up" from="Canvas/Quit" to="Canvas" method="_on_quit_button_up"]
+[connection signal="button_up" from="Canvas/Settings" to="Canvas" method="_on_settings_button_up"]
