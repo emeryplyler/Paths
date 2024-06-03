@@ -4,7 +4,6 @@ extends CanvasLayer
 @export var settings_menu: Control
 @export var darken_bg: ColorRect
 
-
 var tree
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,3 +25,8 @@ func _notification(notif):
 func _on_settings_button_up():
 	settings_menu.set_visible(true)
 	darken_bg.set_visible(true)
+
+
+func _on_back_button_up():
+	settings_menu.set_visible(false)
+	darken_bg.set_visible(false)

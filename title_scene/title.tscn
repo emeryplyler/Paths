@@ -183,6 +183,22 @@ size_flags_horizontal = 3
 text = "Shift"
 icon_alignment = 1
 
+[node name="Back" type="Button" parent="Canvas/SettingsMenu"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -22.5
+offset_top = -93.0
+offset_right = 22.5
+offset_bottom = -62.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+
 [connection signal="button_up" from="Canvas/Start" to="Canvas" method="_on_start_button_up"]
 [connection signal="button_up" from="Canvas/Quit" to="Canvas" method="_on_quit_button_up"]
 [connection signal="button_up" from="Canvas/Settings" to="Canvas" method="_on_settings_button_up"]
+[connection signal="button_up" from="Canvas/SettingsMenu/Back" to="Canvas" method="_on_back_button_up"]
