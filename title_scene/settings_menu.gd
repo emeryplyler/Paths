@@ -1,6 +1,8 @@
 extends GridContainer
 
 @export var glide_control_button: Button
+@export var disable_health_button: Button
+
 
 func _ready():
 	set_text_for_key("Glide")
