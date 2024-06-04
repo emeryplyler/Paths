@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://600bm8lf3kci"]
+
+[ext_resource type="Script" path="res://title_scene/keybinder.gd" id="1_h3uhr"]
+
+[node name="MarginContainer" type="MarginContainer" groups=["hotkey_button"]]
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_right = 60
+script = ExtResource("1_h3uhr")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+icon_alignment = 1
+
+[connection signal="toggled" from="HSplitContainer/Button" to="." method="_on_button_toggled"]

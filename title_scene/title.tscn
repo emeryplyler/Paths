@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://de2pejtnvmf7q"]
+[gd_scene load_steps=4 format=3 uid="uid://de2pejtnvmf7q"]
 
 [ext_resource type="Script" path="res://title_scene/title_menu.gd" id="1_vyfet"]
 [ext_resource type="Texture2D" uid="uid://ds8nruojyfu4k" path="res://assets/ui/settings.png" id="2_rs6as"]
+[ext_resource type="Script" path="res://title_scene/settings_menu.gd" id="3_excfc"]
 
 [node name="Title" type="Node2D"]
 
@@ -120,11 +121,13 @@ theme_override_constants/margin_top = 35
 theme_override_constants/margin_right = 45
 theme_override_constants/margin_bottom = 35
 
-[node name="Menu" type="GridContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings"]
+[node name="Menu" type="GridContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings" node_paths=PackedStringArray("glide_control_button")]
 layout_mode = 2
 theme_override_constants/h_separation = 30
 theme_override_constants/v_separation = 30
 columns = 2
+script = ExtResource("3_excfc")
+glide_control_button = NodePath("GlideControlButton")
 
 [node name="VolumeLabel" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
 layout_mode = 2
@@ -134,6 +137,7 @@ vertical_alignment = 1
 
 [node name="Volume" type="HSlider" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
 layout_mode = 2
+value = 50.0
 
 [node name="DisableHealthLabel" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
 layout_mode = 2
@@ -145,42 +149,16 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 
-[node name="Keybinds" type="MarginContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 45
-theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 45
-theme_override_constants/margin_bottom = 35
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds"]
-layout_mode = 2
-
-[node name="Keybinds" type="VBoxContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds"]
-layout_mode = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_right = 60
-
-[node name="HSplitContainer" type="HSplitContainer" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds/MarginContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds/MarginContainer/HSplitContainer"]
+[node name="GlideLabel" type="Label" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Glide"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Keybinds/ScrollContainer/Keybinds/MarginContainer/HSplitContainer"]
+[node name="GlideControlButton" type="Button" parent="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Shift"
 icon_alignment = 1
 
 [node name="Back" type="Button" parent="Canvas/SettingsMenu"]
@@ -201,4 +179,5 @@ text = "Back"
 [connection signal="button_up" from="Canvas/Start" to="Canvas" method="_on_start_button_up"]
 [connection signal="button_up" from="Canvas/Quit" to="Canvas" method="_on_quit_button_up"]
 [connection signal="button_up" from="Canvas/Settings" to="Canvas" method="_on_settings_button_up"]
+[connection signal="toggled" from="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu/GlideControlButton" to="Canvas/SettingsMenu/MarginContainer/TabContainer/Settings/Menu" method="_on_glide_control_button_toggled"]
 [connection signal="button_up" from="Canvas/SettingsMenu/Back" to="Canvas" method="_on_back_button_up"]
