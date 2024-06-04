@@ -6,11 +6,15 @@
 
 [node name="Title" type="Node2D"]
 
-[node name="Canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("settings_button", "settings_menu", "darken_bg")]
+[node name="Canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("settings_button", "settings_menu", "darken_bg", "menu_script", "volume_slider", "disable_health_button", "glide_control")]
 script = ExtResource("1_vyfet")
 settings_button = NodePath("Settings")
 settings_menu = NodePath("SettingsMenu")
 darken_bg = NodePath("DarkenBg")
+menu_script = NodePath("SettingsMenu/MarginContainer/TabContainer/Settings/Menu")
+volume_slider = NodePath("SettingsMenu/MarginContainer/TabContainer/Settings/Menu/Volume")
+disable_health_button = NodePath("SettingsMenu/MarginContainer/TabContainer/Settings/Menu/DisableHealth")
+glide_control = NodePath("SettingsMenu/MarginContainer/TabContainer/Settings/Menu/GlideControlButton")
 
 [node name="tempbg" type="ColorRect" parent="Canvas"]
 offset_right = 2378.0
@@ -72,8 +76,6 @@ grow_vertical = 2
 pivot_offset = Vector2(294, 73)
 theme_override_font_sizes/normal_font_size = 100
 text = "Tunnel Bird"
-
-[node name="PopupMenu" type="PopupMenu" parent="Canvas"]
 
 [node name="DarkenBg" type="ColorRect" parent="Canvas"]
 anchors_preset = 8
