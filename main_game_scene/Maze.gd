@@ -32,6 +32,10 @@ var player_health: int = 3 # current health, init at 3
 @export var BlackScreenAnimator: CanvasLayer
 @export var GameOverScreen: Control
 
+var config = ConfigFile.new()
+var volume = 50
+var disable_health: bool = false
+
 var current_portal_inst # will store reference to the portal spawned in
 
 # Dictionary with vectors corresponding to the directions
@@ -48,7 +52,14 @@ func _ready():
 	#var berry_inst = Berries.instantiate()
 	#berry_inst.picked_up_berries.connect(_on_berry_pickup)
 	GameOverScreen.set_visible(false) # make sure game over screen is not showing
+	
+	# load from config file
+	read_from_config()
+	
 	level_gen()
+	
+	if disable_health:
+		player_health = 10
 
 # create a level
 func level_gen():
@@ -187,10 +198,11 @@ func make_maze():
 				portal_tile = current # save this location for placing portal
 			
 			# make berries
-			if randi_range(0, 8) == 1 and berries_placed < max_berries and current != portal_tile and current != starting_spot:
-				var berry_position = to_global(Map.map_to_local(current))
-				make_berries(berry_position)
-				berries_placed += 1
+			if not disable_health: # only place berries if health is enabled
+				if randi_range(0, 8) == 1 and berries_placed < max_berries and current != portal_tile and current != starting_spot:
+					var berry_position = to_global(Map.map_to_local(current))
+					make_berries(berry_position)
+					berries_placed += 1
 				
 				
 		elif stack: # no neighbors to go to, but somethings in the stack
@@ -219,7 +231,8 @@ func _on_player_entered_portal():
 
 func _on_hazard_detector_body_entered(body):
 	# respawn player at start
-	player_health -= 1
+	if not disable_health:
+		player_health -= 1
 	player_died.emit() # trigger animations
 	# NOTE: do we need an invincibility timer?
 
@@ -253,3 +266,12 @@ func respawn_player():
 
 func _on_title_screen_button_up():
 	get_tree().change_scene_to_file("res://title_scene/title.tscn")
+
+
+func read_from_config():
+	var err = config.load("user://settings.cfg")
+	if err != OK:
+		return # file didn't load right
+	
+	volume = config.get_value("Settings", "Volume", 50) # 3rd value is default
+	disable_health = config.get_value("Settings", "DisableHealth", false)
