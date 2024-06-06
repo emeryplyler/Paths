@@ -1,6 +1,5 @@
 extends Node
 
-@export var black_screen: ColorRect
 @export var maze: Node2D
 @export var animator: AnimationPlayer
 @export var health_bar: TextureRect

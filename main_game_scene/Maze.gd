@@ -31,6 +31,7 @@ var player_health: int = 3 # current health, init at 3
 
 @export var BlackScreenAnimator: CanvasLayer
 @export var GameOverScreen: Control
+@export var menu_darken_bg: ColorRect
 
 var config = ConfigFile.new()
 var volume = 50
@@ -51,7 +52,9 @@ func _ready():
 	BlackScreenAnimator.game_over.connect(_on_game_over) # signal sent from animator for timing death sequence
 	#var berry_inst = Berries.instantiate()
 	#berry_inst.picked_up_berries.connect(_on_berry_pickup)
+	GameOverScreen.find_child("YouDied").set_visible(true)
 	GameOverScreen.set_visible(false) # make sure game over screen is not showing
+	menu_darken_bg.set_visible(false) # make sure menu bg is also not showing
 	
 	# load from config file
 	read_from_config()
@@ -253,6 +256,7 @@ func _on_retry_button_up():
 	player_health = 3
 	player_respawn.emit() # signal to animator to fade out the black screen
 	GameOverScreen.set_visible(false)
+	menu_darken_bg.set_visible(false)
 	# reset level and score?
 	passes = 0
 	destroy_portal() # THIS PART IS IMPORTANT! reset portal location
@@ -275,3 +279,9 @@ func read_from_config():
 	
 	volume = config.get_value("Settings", "Volume", 50) # 3rd value is default
 	disable_health = config.get_value("Settings", "DisableHealth", false)
+
+
+func _on_main_menu_toggled(toggled_on):
+	GameOverScreen.set_visible(toggled_on)
+	menu_darken_bg.set_visible(toggled_on)
+	GameOverScreen.find_child("YouDied").set_visible(!toggled_on)

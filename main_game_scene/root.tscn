@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://hf2pbkxluubv"]
+[gd_scene load_steps=38 format=3 uid="uid://hf2pbkxluubv"]
 
 [ext_resource type="Script" path="res://player/PlayerMovement.gd" id="1_uu05j"]
 [ext_resource type="Texture2D" uid="uid://dfufq4rhw60f8" path="res://assets/player/playeratlas.png" id="2_cled6"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d35hjqhp0ikpm" path="res://interactables/portal/portal.tscn" id="4_ftpbv"]
 [ext_resource type="TileSet" uid="uid://c6ihmqc6xrg2o" path="res://assets/environment/defaultwallstileset.tres" id="5_hn2qt"]
 [ext_resource type="Texture2D" uid="uid://dkfjcf1dvqfpn" path="res://assets/environment/back.png" id="7_5a7f6"]
+[ext_resource type="Texture2D" uid="uid://jrtn6dhwnuio" path="res://assets/ui/pause.png" id="7_v68ti"]
 [ext_resource type="Texture2D" uid="uid://c4ovq0o4kjeua" path="res://assets/environment/para1.png" id="8_01bof"]
 [ext_resource type="Texture2D" uid="uid://cbnvxcglgs1o7" path="res://assets/player/player_health.png" id="8_ixdf4"]
 [ext_resource type="PackedScene" uid="uid://dbvpesy5un5kv" path="res://interactables/berries/berries.tscn" id="11_74i73"]
@@ -323,9 +324,8 @@ limit_bottom = 1920
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Player/Camera2D" node_paths=PackedStringArray("black_screen", "maze", "animator", "health_bar")]
+[node name="CanvasLayer" type="CanvasLayer" parent="Player/Camera2D" node_paths=PackedStringArray("maze", "animator", "health_bar")]
 script = ExtResource("3_5nyt0")
-black_screen = NodePath("BlackScreen")
 maze = NodePath("../../../Maze")
 animator = NodePath("BlackScreen/AnimationPlayer")
 health_bar = NodePath("Health/TextureRect")
@@ -382,6 +382,11 @@ scale = Vector2(0.4, 0.4)
 texture = ExtResource("8_ixdf4")
 expand_mode = 1
 stretch_mode = 1
+
+[node name="MenuDarkenBg" type="ColorRect" parent="Player/Camera2D/CanvasLayer"]
+offset_right = 2300.0
+offset_bottom = 1360.0
+color = Color(0, 0, 0, 0.439216)
 
 [node name="GameOver" type="Control" parent="Player/Camera2D/CanvasLayer"]
 visible = false
@@ -440,9 +445,20 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Title Screen"
 
-[node name="Pause" type="Button" parent="Player/Camera2D/CanvasLayer"]
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="Main Menu" type="TextureButton" parent="Player/Camera2D/CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -66.0
+offset_top = 14.0
+offset_right = 34.0
+offset_bottom = 114.0
+grow_horizontal = 0
+scale = Vector2(0.5, 0.5)
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("7_v68ti")
+texture_pressed = ExtResource("7_v68ti")
 
 [node name="WallJumpTimer" type="Timer" parent="Player"]
 wait_time = 0.13
@@ -482,7 +498,7 @@ parameters/movement/current_state = "idle"
 parameters/movement/transition_request = ""
 parameters/movement/current_index = 0
 
-[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam", "passes_label", "BlackScreenAnimator", "GameOverScreen")]
+[node name="Maze" type="Node2D" parent="." node_paths=PackedStringArray("Map", "Player", "Cam", "passes_label", "BlackScreenAnimator", "GameOverScreen", "menu_darken_bg")]
 script = ExtResource("3_jxabw")
 Map = NodePath("TileMap")
 Player = NodePath("../Player")
@@ -493,6 +509,7 @@ passes_label = NodePath("../Player/Camera2D/CanvasLayer/Label")
 max_berries = 3
 BlackScreenAnimator = NodePath("../Player/Camera2D/CanvasLayer")
 GameOverScreen = NodePath("../Player/Camera2D/CanvasLayer/GameOver")
+menu_darken_bg = NodePath("../Player/Camera2D/CanvasLayer/MenuDarkenBg")
 
 [node name="TileMap" type="TileMap" parent="Maze"]
 tile_set = ExtResource("5_hn2qt")
@@ -502,5 +519,6 @@ layer_0/name = "Walls"
 [connection signal="animation_changed" from="Player/Camera2D/CanvasLayer/BlackScreen/AnimationPlayer" to="Maze" method="_on_animation_player_animation_changed"]
 [connection signal="button_up" from="Player/Camera2D/CanvasLayer/GameOver/Retry" to="Maze" method="_on_retry_button_up"]
 [connection signal="button_up" from="Player/Camera2D/CanvasLayer/GameOver/TitleScreen" to="Maze" method="_on_title_screen_button_up"]
+[connection signal="toggled" from="Player/Camera2D/CanvasLayer/Main Menu" to="Maze" method="_on_main_menu_toggled"]
 [connection signal="timeout" from="Player/WallJumpTimer" to="Player" method="_on_wall_jump_timer_timeout"]
 [connection signal="body_entered" from="Player/HazardDetector" to="Maze" method="_on_hazard_detector_body_entered"]
